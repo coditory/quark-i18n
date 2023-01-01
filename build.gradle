@@ -17,7 +17,7 @@ dependencies {
     // local dev only
     implementation 'ch.qos.logback:logback-classic:1.4.5'
 
-    api 'org.slf4j:slf4j-api:2.0.5'
+    api 'org.slf4j:slf4j-api:2.0.6'
     api 'org.jetbrains:annotations:23.0.0'
     implementation 'org.yaml:snakeyaml:1.33'
     implementation 'com.google.code.gson:gson:2.10'
