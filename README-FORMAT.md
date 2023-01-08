@@ -46,8 +46,8 @@ with syntax `{key, type, format}` or `{key, type, ::skeleton}`
   locale agnostic wat to format values
 
 ```
-You have {count, number} messages.
-{unread, number, percent} of them are new.
+You have {count, number} new messages.
+{spamPercent, number, percent} of them is spam.
 ```
 
 ## Format type: number
@@ -135,7 +135,7 @@ It's often used to format message based on a gender.
     male {He}
     female {She}
     other {They}
-} will respond shortly.
+} sent you a message.
 ```
 
 You can also nest arguments like:
@@ -168,9 +168,9 @@ all [plural categories](http://cldr.unicode.org/index/cldr-spec/plural-rules).
 
 ```
 You have {itemCount, plural,
-    =0 {no items}
-    one {1 item}
-    other {# items}
+    =0 {no messages}
+    one {1 message}
+    other {# messages}
 }.
 ```
 

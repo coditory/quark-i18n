@@ -80,7 +80,8 @@ public record I18nKey(Locale locale, I18nPath path) {
     }
 
     public String toShortString() {
-        return "" + locale + ':' + path;
+        String localeString = locale.toString().replaceAll("_", "-");
+        return localeString + ':' + path;
     }
 
     @Override

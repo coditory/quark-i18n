@@ -6,8 +6,6 @@ import com.coditory.quark.i18n.I18nSystemDefaults
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import java.time.Instant
-
 import static com.coditory.quark.i18n.Locales.EN_US
 import static com.coditory.quark.i18n.Locales.PL_PL
 
@@ -15,7 +13,7 @@ class IcuRuleBasedFormatSpec extends Specification {
     static final I18nMessagePack messages = I18nMessagePackFactory.emptyMessagePack()
 
     void setup() {
-        I18nSystemDefaults.setupNormalized()
+        I18nSystemDefaults.setupGmtAndEnUsAsDefaults()
     }
 
     @Unroll

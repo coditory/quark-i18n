@@ -11,9 +11,5 @@ import java.util.Map;
 @FunctionalInterface
 public interface I18nParser {
     @NotNull
-    Map<I18nKey, String> parse(
-            @NotNull String content,
-            @Nullable I18nPath prefix,
-            @Nullable Locale locale
-    );
+    Map<I18nKey, String> parse(@NotNull String content, @Nullable Locale locale);
 }

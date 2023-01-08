@@ -63,6 +63,26 @@ class LoadI18nFromFileSystemSpec extends Specification implements UsesInMemFs {
             messagesEn.getMessage("homepage.title") == "Homepage"
     }
 
+    def "should load a single i18n file"() {
+        given:
+            writeInMemFsFile("abc/i18n.yml", """
+            title:
+              en: Homepage
+              pl: Strona domowa
+            """)
+
+        when:
+            I18nMessagePack i18nMessagePack = scanInMemFs("abc/i18n.yml")
+
+        then:
+            I18nMessages messagesPl = i18nMessagePack.localize(PL_PL)
+            messagesPl.getMessage("title") == "Strona domowa"
+
+        and:
+            I18nMessages messagesEn = i18nMessagePack.localize(EN_US)
+            messagesEn.getMessage("title") == "Homepage"
+    }
+
     def "should load i18n files using locale from file path"() {
         given:
             writeInMemFsFile("com/acme/homepage/i18n-pl.yml", "homepage.title: Strona domowa")

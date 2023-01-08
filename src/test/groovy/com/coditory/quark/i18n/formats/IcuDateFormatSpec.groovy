@@ -25,7 +25,7 @@ class IcuDateFormatSpec extends Specification {
     static final LocalDate localDate = LocalDate.ofInstant(instant, ZoneOffset.UTC)
 
     void setup() {
-        I18nSystemDefaults.setupNormalized()
+        I18nSystemDefaults.setupGmtAndEnUsAsDefaults()
     }
 
     @Unroll

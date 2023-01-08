@@ -3,9 +3,9 @@ package com.coditory.quark.i18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
@@ -13,14 +13,14 @@ import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 final class ImmutableI18nMessagePack implements I18nMessagePack {
     private final Map<I18nKey, MessageTemplate> templates;
     private final MessageTemplateParser parser;
-    private final I18nUnresolvedMessageHandler unresolvedMessageHandler;
+    private final I18nMissingMessageHandler unresolvedMessageHandler;
     private final I18nPath queryPrefix;
     private final I18nKeyGenerator keyGenerator;
 
     ImmutableI18nMessagePack(
             Map<I18nKey, MessageTemplate> templates,
             MessageTemplateParser parser,
-            I18nUnresolvedMessageHandler unresolvedMessageHandler,
+            I18nMissingMessageHandler unresolvedMessageHandler,
             I18nKeyGenerator keyGenerator
     ) {
         this(templates, parser, unresolvedMessageHandler, keyGenerator, null);
@@ -29,7 +29,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     private ImmutableI18nMessagePack(
             Map<I18nKey, MessageTemplate> templates,
             MessageTemplateParser parser,
-            I18nUnresolvedMessageHandler unresolvedMessageHandler,
+            I18nMissingMessageHandler unresolvedMessageHandler,
             I18nKeyGenerator keyGenerator,
             I18nPath queryPrefix
     ) {
@@ -66,7 +66,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
         expectNonNull(args, "args");
         String result = getMessageOrNull(key, args);
         return result == null
-                ? unresolvedMessageHandler.onUnresolvedMessage(key, args)
+                ? unresolvedMessageHandler.onUnresolvedMessageWithNamedArguments(key, args)
                 : result;
     }
 
@@ -90,39 +90,70 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
                 .orElse(null);
     }
 
-    private Optional<MessageTemplate> getTemplate(I18nKey key) {
+    private Optional<MessageTemplateWithKey> getTemplate(I18nKey key) {
         return keyGenerator.keys(key, queryPrefix).stream()
-                .map(templates::get)
-                .filter(Objects::nonNull)
+                .filter(templates::containsKey)
+                .map(matched -> new MessageTemplateWithKey(matched, templates.get(matched)))
                 .findFirst();
     }
 
     @NotNull
     @Override
-    public String format(@NotNull Locale locale, @NotNull String expression, Object... args) {
+    public String format(@NotNull Locale locale, @NotNull String template, Object... args) {
         expectNonNull(locale, "locale");
-        expectNonNull(expression, "expression");
+        expectNonNull(template, "template");
         expectNonNull(args, "args");
-        Object value = parser.parseTemplate(locale, expression)
-                .resolve(locale, args);
-        return Objects.toString(value);
+        try {
+            return parser.parseTemplate(locale, template)
+                    .resolve(locale, args);
+        } catch (Throwable e) {
+            throw new IllegalArgumentException("Could not format message " + template
+                    + "\" with indexed arguments " + Arrays.toString(args) + " and locale: " + locale);
+        }
     }
 
     @NotNull
     @Override
-    public String format(@NotNull Locale locale, @NotNull String expression, @NotNull Map<String, Object> args) {
+    public String format(@NotNull Locale locale, @NotNull String template, @NotNull Map<String, Object> args) {
         expectNonNull(locale, "locale");
-        expectNonNull(expression, "expression");
+        expectNonNull(template, "template");
         expectNonNull(args, "args");
-        Object value = parser.parseTemplate(locale, expression)
-                .resolve(locale, args);
-        return Objects.toString(value);
+        try {
+            return parser.parseTemplate(locale, template)
+                    .resolve(locale, args);
+        } catch (Throwable e) {
+            throw new IllegalArgumentException("Could not format message "
+                    + template
+                    + "\" with named arguments " + args + " and locale: " + locale);
+        }
     }
 
     @Override
     @NotNull
-    public I18nMessagePack withQueryPrefix(@NotNull String prefix) {
-        I18nPath path = I18nPath.of(prefix);
-        return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, keyGenerator, path);
+    public I18nMessagePack prefixQueries(@NotNull I18nPath prefix) {
+        expectNonNull(prefix, "prefix");
+        return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, keyGenerator, prefix);
+    }
+
+    private record MessageTemplateWithKey(I18nKey key, MessageTemplate template) {
+        String resolve(Locale locale, @NotNull Map<String, Object> args) {
+            try {
+                return template.resolve(locale, args);
+            } catch (Throwable e) {
+                throw new IllegalArgumentException("Could not resolve message "
+                        + key.toShortString() + "=\"" + template.getValue()
+                        + "\" with named arguments " + args + " and locale: " + locale, e);
+            }
+        }
+
+        String resolve(Locale locale, @NotNull Object[] args) {
+            try {
+                return template.resolve(locale, args);
+            } catch (Throwable e) {
+                throw new IllegalArgumentException("Could not resolve message "
+                        + key.toShortString() + "=\"" + template.getValue()
+                        + "\" with indexed arguments " + Arrays.toString(args) + " and locale: " + locale, e);
+            }
+        }
     }
 }

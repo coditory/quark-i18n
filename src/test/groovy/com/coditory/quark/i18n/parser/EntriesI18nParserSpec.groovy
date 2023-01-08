@@ -54,31 +54,6 @@ class EntriesI18nParserSpec extends Specification {
     }
 
     @Unroll
-    def "should use prefix passed as param for #input"() {
-        when:
-            Map<I18nKey, String> parsed = parseEntries([(input): "value"], I18nPath.of("x", "y"))
-        then:
-            parsed == [(expected): "value"]
-        where:
-            input     || expected
-            "a.pl"    || I18nKey.of(PL, I18nPath.of("x.y.a"))
-            "a._pl.b" || I18nKey.of(PL, I18nPath.of("x.y.a.b"))
-    }
-
-    @Unroll
-    def "should use prefix and locale passed as param for #input"() {
-        when:
-            Map<I18nKey, String> parsed = parseEntries([(input): "value"], I18nPath.of("x", "y"), DE_DE)
-        then:
-            parsed == [(expected): "value"]
-        where:
-            input || expected
-            ""    || I18nKey.of(DE_DE, I18nPath.of("x.y"))
-            "a"   || I18nKey.of(DE_DE, I18nPath.of("x.y.a"))
-            "a.b" || I18nKey.of(DE_DE, I18nPath.of("x.y.a.b"))
-    }
-
-    @Unroll
     def "should throw exception when parsing entry key #input"() {
         when:
             parseEntries([(input): "value"])

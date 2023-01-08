@@ -21,32 +21,32 @@ trait UsesInMemFs {
     void writeInMemFsFile(String fileName, String content) {
         setupInMemFs()
         Path path = inMemFs.getPath(fileName)
-        println "Writing in-mem file: " + path.toAbsolutePath()
         if (!Files.exists(path.parent)) {
             Files.createDirectories(path.parent)
         }
         String trimmed = content.stripIndent().trim()
         Files.writeString(path, trimmed)
+        println "Wrote in-mem file: " + path.toAbsolutePath()
     }
 
     void deleteInMemFile(String fileName) {
         Path path = inMemFs.getPath(fileName)
-        println "Deleting in-mem file: " + path.toAbsolutePath()
         Files.delete(path)
+        println "Deleted in-mem file: " + path.toAbsolutePath()
     }
 
     void deleteInMemDirRecursively(String dirName) {
         Path path = inMemFs.getPath(dirName)
-        println "Deleting in-mem dir: " + path.toAbsolutePath()
         Files.walk(path)
                 .sorted(Comparator.reverseOrder())
                 .forEach { Files.delete(it) }
+        println "Deleted in-mem dir: " + path.toAbsolutePath()
     }
 
     void createInMemDir(String dirName) {
         Path path = inMemFs.getPath(dirName)
-        println "Creating in-mem dir: " + path.toAbsolutePath()
         Files.createDirectories(path)
+        println "Created in-mem dir: " + path.toAbsolutePath()
     }
 
     I18nMessagePack scanInMemFs(String firstPattern, String... others) {

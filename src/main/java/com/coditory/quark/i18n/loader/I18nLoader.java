@@ -7,5 +7,5 @@ import java.util.List;
 @FunctionalInterface
 public interface I18nLoader {
     @NotNull
-    List<I18nTemplates> load();
+    List<I18nMessageBundle> load();
 }

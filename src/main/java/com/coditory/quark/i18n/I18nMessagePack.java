@@ -16,18 +16,6 @@ public interface I18nMessagePack {
     }
 
     @NotNull
-    I18nMessages localize(@NotNull Locale locale);
-
-    @NotNull
-    default I18nMessages localize(@NotNull String localeTag) {
-        Locale locale = Locales.parseLocale(localeTag);
-        return localize(locale);
-    }
-
-    @NotNull
-    I18nMessagePack withQueryPrefix(@NotNull String prefix);
-
-    @NotNull
     String getMessage(@NotNull I18nKey key, Object... args);
 
     @NotNull
@@ -105,6 +93,8 @@ public interface I18nMessagePack {
 
     @Nullable
     default String getMessageOrNull(@NotNull Locale locale, @NotNull String key) {
+        expectNonNull(locale, "locale");
+        expectNonNull(key, "key");
         return getMessageOrNull(locale, key, EMPTY_ARGS);
     }
 
@@ -112,5 +102,23 @@ public interface I18nMessagePack {
     String format(@NotNull Locale locale, @NotNull String template, Object... args);
 
     @NotNull
-    String format(@NotNull Locale locale, @NotNull String expression, @NotNull Map<String, Object> args);
+    String format(@NotNull Locale locale, @NotNull String template, @NotNull Map<String, Object> args);
+
+    @NotNull
+    I18nMessages localize(@NotNull Locale locale);
+
+    @NotNull
+    default I18nMessages localize(@NotNull String locale) {
+        expectNonNull(locale, "locale");
+        return localize(Locales.parseLocale(locale));
+    }
+
+    @NotNull
+    I18nMessagePack prefixQueries(I18nPath prefix);
+
+    @NotNull
+    default I18nMessagePack prefixQueries(@NotNull String prefix) {
+        expectNonNull(prefix, "prefix");
+        return prefixQueries(I18nPath.of(prefix));
+    }
 }

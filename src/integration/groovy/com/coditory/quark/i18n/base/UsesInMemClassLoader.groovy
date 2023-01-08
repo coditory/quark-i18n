@@ -19,12 +19,12 @@ trait UsesInMemClassLoader {
     void writeInMemClassPathFile(String fileName, String content) {
         setupClassLoaderStub()
         Path path = classLoaderPath.resolve(fileName)
-        if (!Files.exists(path.parent)) {
-            println "Writing classpath file: " + path
+        if (path.parent != null && !Files.exists(path.parent)) {
             Files.createDirectories(path.parent)
         }
         String trimmed = content.stripIndent().trim()
         Files.writeString(path, trimmed)
+        println "Wrote classpath file: " + path
     }
 
     I18nMessagePack scanInMemClassPath(String firstPattern, String... others) {

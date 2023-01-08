@@ -36,11 +36,11 @@ class Json18nParserSpec extends Specification {
               "user": {
                 "name": "User Name"
               }
-            }""".stripIndent().trim(), I18nPath.of("x", "y"), Locales.EN)
+            }""".stripIndent().trim(), Locales.EN)
         then:
             parsed == [
-                    (I18nKey.of(EN, I18nPath.of("x.y.title")))    : "Homepage",
-                    (I18nKey.of(EN, I18nPath.of("x.y.user.name"))): "User Name"
+                    (I18nKey.of(EN, I18nPath.of("title")))    : "Homepage",
+                    (I18nKey.of(EN, I18nPath.of("user.name"))): "User Name"
             ]
     }
 }

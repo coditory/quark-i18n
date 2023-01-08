@@ -16,7 +16,7 @@ class IcuTimeFormatSpec extends Specification {
     static final Instant instant = Instant.parse("2007-12-03T10:15:30.00Z")
 
     void setup() {
-        I18nSystemDefaults.setupNormalized()
+        I18nSystemDefaults.setupGmtAndEnUsAsDefaults()
     }
 
     @Unroll

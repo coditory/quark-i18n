@@ -13,6 +13,7 @@ class FileWatcherSpec extends Specification implements UsesInMemFs {
 
     def "should send event on created file when parent dir was created after watch"() {
         given:
+            createInMemDir("a")
             watch("a/**")
         when:
             writeInMemFsFile("a/b/c/foo.txt", "foo")
@@ -56,6 +57,7 @@ class FileWatcherSpec extends Specification implements UsesInMemFs {
 
     def "should send event on deleted files when files were created after watch"() {
         given:
+            createInMemDir("a")
             watch("a/**")
             writeInMemFsFile("a/b/c/foo.txt", "foo")
             writeInMemFsFile("a/bar.txt", "bar")
@@ -100,6 +102,7 @@ class FileWatcherSpec extends Specification implements UsesInMemFs {
 
     def "should send event on file modification when file was created after watch"() {
         given:
+            createInMemDir("a")
             watch("a/**")
             writeInMemFsFile("a/b/c/foo.txt", "foo")
             listener.skipEvents(1)

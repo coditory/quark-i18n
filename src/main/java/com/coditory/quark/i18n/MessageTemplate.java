@@ -5,12 +5,16 @@ import com.ibm.icu.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.coditory.quark.i18n.ArgumentIndexExtractor.extractArgumentIndexes;
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 
 final class MessageTemplate {
     static MessageTemplate parse(String template, ArgumentResolver argumentResolver) {
+        expectNonNull(template, "template");
+        expectNonNull(argumentResolver, "argumentResolver");
         try {
             MessageFormat messageFormat = new MessageFormat(template);
             return new MessageTemplate(template, messageFormat, argumentResolver);
@@ -24,19 +28,27 @@ final class MessageTemplate {
     private final String template;
     private final MessageFormat messageFormat;
     private final boolean dynamic;
+    private final Set<String> usedArgumentNames;
+    private final Set<Integer> usedArgumentIndexes;
 
     private MessageTemplate(String template, MessageFormat messageFormat, ArgumentResolver argumentResolver) {
         this.template = expectNonNull(template, "template");
         this.messageFormat = expectNonNull(messageFormat, "messageFormat");
-        this.dynamic = messageFormat.getFormats().length > 0;
         this.argumentResolver = expectNonNull(argumentResolver, "argumentResolver");
+        this.usedArgumentNames = messageFormat.usesNamedArguments()
+                ? Set.copyOf(messageFormat.getArgumentNames())
+                : Set.of();
+        this.usedArgumentIndexes = messageFormat.usesNamedArguments()
+                ? Set.of()
+                : extractArgumentIndexes(template);
+        this.dynamic = !usedArgumentNames.isEmpty() || !usedArgumentIndexes.isEmpty();
     }
 
     public String resolve(Locale locale, Object[] args) {
         expectNonNull(locale, "locale");
         expectNonNull(args, "args");
         MessageFormat messageFormat = getMessageFormat(locale);
-        Object[] resolvedArgs = argumentResolver.resolveArguments(args);
+        Object[] resolvedArgs = argumentResolver.resolveArguments(args, usedArgumentIndexes);
         return messageFormat.format(resolvedArgs);
     }
 
@@ -44,7 +56,7 @@ final class MessageTemplate {
         expectNonNull(locale, "locale");
         expectNonNull(args, "args");
         MessageFormat messageFormat = getMessageFormat(locale);
-        Map<String, Object> resolvedArgs = argumentResolver.resolveArguments(args);
+        Map<String, Object> resolvedArgs = argumentResolver.resolveArguments(args, usedArgumentNames);
         return messageFormat.format(resolvedArgs);
     }
 
@@ -58,6 +70,10 @@ final class MessageTemplate {
         MessageFormat copy = (MessageFormat) this.messageFormat.clone();
         copy.setLocale(locale);
         return copy;
+    }
+
+    public String getValue() {
+        return template;
     }
 
     @Override

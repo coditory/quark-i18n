@@ -22,82 +22,42 @@ public final class I18nParsers {
     );
 
     @NotNull
-    public static Map<I18nKey, String> parseYaml(@NotNull String content, @Nullable I18nPath prefix, @Nullable Locale locale) {
-        return YAML_I18N_PARSER.parse(content, prefix, locale);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseYaml(@NotNull String content, @Nullable I18nPath prefix) {
-        return parseYaml(content, prefix, null);
-    }
-
-    @NotNull
     public static Map<I18nKey, String> parseYaml(@NotNull String content, @Nullable Locale locale) {
-        return parseYaml(content, null, locale);
+        return YAML_I18N_PARSER.parse(content, locale);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseYaml(@NotNull String content) {
-        return parseYaml(content, null, null);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseProperties(@NotNull String content, @Nullable I18nPath prefix, @Nullable Locale locale) {
-        return PROPERTIES_I18N_PARSER.parse(content, prefix, locale);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseProperties(@NotNull String content, @Nullable I18nPath prefix) {
-        return parseProperties(content, prefix, null);
+        return parseYaml(content, null);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseProperties(@NotNull String content, @Nullable Locale locale) {
-        return parseProperties(content, null, locale);
+        return PROPERTIES_I18N_PARSER.parse(content, locale);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseProperties(@NotNull String content) {
-        return parseProperties(content, null, null);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseJson(@NotNull String content, @Nullable I18nPath prefix, @Nullable Locale locale) {
-        return JSON_I18N_PARSER.parse(content, prefix, locale);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseJson(@NotNull String content, @Nullable I18nPath prefix) {
-        return parseJson(content, prefix, null);
+        return parseProperties(content, null);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseJson(@NotNull String content, @Nullable Locale locale) {
-        return parseJson(content, null, locale);
+        return JSON_I18N_PARSER.parse(content, locale);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseJson(@NotNull String content) {
-        return parseJson(content, null, null);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseEntries(@NotNull Map<String, Object> entries, @Nullable I18nPath prefix, @Nullable Locale locale) {
-        return I18N_KEY_PARSER.parseEntries(entries, prefix, locale);
-    }
-
-    @NotNull
-    public static Map<I18nKey, String> parseEntries(@NotNull Map<String, Object> entries, @Nullable I18nPath prefix) {
-        return parseEntries(entries, prefix, null);
+        return parseJson(content, null);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseEntries(@NotNull Map<String, Object> entries, @Nullable Locale locale) {
-        return parseEntries(entries, null, locale);
+        return I18N_KEY_PARSER.parseEntries(entries, locale);
     }
 
     @NotNull
     public static Map<I18nKey, String> parseEntries(@NotNull Map<String, Object> entries) {
-        return parseEntries(entries, null, null);
+        return parseEntries(entries, null);
     }
 }

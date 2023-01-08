@@ -69,6 +69,8 @@ public final class Currencies {
 
     @NotNull
     public static String formatByCurrency(@NotNull BigDecimal amount, @NotNull Currency currency) {
+        expectNonNull(amount, "amount");
+        expectNonNull(currency, "currency");
         Locale currencyLocale = LOCALE_BY_CURRENCY.get(currency);
         if (currencyLocale == null) {
             throw new IllegalArgumentException("Unrecognized currency: " + currency);
@@ -78,6 +80,7 @@ public final class Currencies {
 
     @NotNull
     public static String formatByCurrency(long amount, @NotNull Currency currency) {
+        expectNonNull(currency, "currency");
         Locale currencyLocale = LOCALE_BY_CURRENCY.get(currency);
         if (currencyLocale == null) {
             throw new IllegalArgumentException("Missing locale for currency: " + currency);
@@ -87,6 +90,7 @@ public final class Currencies {
 
     @NotNull
     public static String formatByCurrency(double amount, @NotNull Currency currency) {
+        expectNonNull(currency, "currency");
         Locale currencyLocale = LOCALE_BY_CURRENCY.get(currency);
         if (currencyLocale == null) {
             throw new IllegalArgumentException("Missing locale for currency: " + currency);

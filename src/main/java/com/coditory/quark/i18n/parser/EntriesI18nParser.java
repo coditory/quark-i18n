@@ -12,17 +12,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 final class EntriesI18nParser {
+    public Map<I18nKey, String> parseEntries(@NotNull Map<String, Object> values, @Nullable Locale locale) {
+        requireNonNull(values);
+        return parseEntries(values, I18nPath.root(), locale);
+    }
+
     @SuppressWarnings("unchecked")
-    @NotNull
-    public Map<I18nKey, String> parseEntries(
-            @NotNull Map<String, Object> values,
-            @Nullable I18nPath prefix,
-            @Nullable Locale locale
-    ) {
-        if (prefix == null) {
-            prefix = I18nPath.root();
-        }
+    private Map<I18nKey, String> parseEntries(Map<String, Object> values, I18nPath prefix, Locale locale) {
         Map<I18nKey, String> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             I18nPath path = prefix.child(entry.getKey());

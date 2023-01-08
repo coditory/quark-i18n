@@ -18,14 +18,14 @@ class IcuSelectFormatSpec extends Specification {
                         female {She}
                         other {They}
                     } sent you a message
-                    """.stripIndent())
+                    """.stripIndent().trim())
                     .addMessage(PL_PL, key, """
                     {0, select,
                         male {On wysłał}
                         female {Ona wysłała}
                         other {Oni wysłali}
                     } ci wiadomość
-                    """.stripIndent())
+                    """.stripIndent().trim())
                     .build()
                     .localize(locale)
         when:

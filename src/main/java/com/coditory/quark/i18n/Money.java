@@ -8,6 +8,11 @@ import java.util.Currency;
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 
 public record Money(@NotNull BigDecimal amount, @NotNull Currency currency) {
+    public Money(BigDecimal amount, Currency currency) {
+        this.amount = expectNonNull(amount, "amount");
+        this.currency = expectNonNull(currency, "currency");
+    }
+
     @NotNull
     static Money of(double amount, @NotNull Currency currency) {
         return new Money(BigDecimal.valueOf(amount), currency);
@@ -25,6 +30,7 @@ public record Money(@NotNull BigDecimal amount, @NotNull Currency currency) {
 
     @NotNull
     public Money add(@NotNull Money other) {
+        expectNonNull(other, "other");
         expectSameCurrencies(other);
         BigDecimal result = amount.add(other.amount);
         return new Money(result, currency);
@@ -32,6 +38,7 @@ public record Money(@NotNull BigDecimal amount, @NotNull Currency currency) {
 
     @NotNull
     public Money subtract(@NotNull Money other) {
+        expectNonNull(other, "other");
         expectSameCurrencies(other);
         BigDecimal result = amount.subtract(other.amount);
         return new Money(result, currency);
@@ -39,6 +46,7 @@ public record Money(@NotNull BigDecimal amount, @NotNull Currency currency) {
 
     @NotNull
     public Money multiply(@NotNull Money other) {
+        expectNonNull(other, "other");
         expectSameCurrencies(other);
         BigDecimal result = amount.multiply(other.amount);
         return new Money(result, currency);
@@ -46,6 +54,7 @@ public record Money(@NotNull BigDecimal amount, @NotNull Currency currency) {
 
     @NotNull
     public Money divide(@NotNull Money other) {
+        expectNonNull(other, "other");
         expectSameCurrencies(other);
         BigDecimal result = amount.divide(other.amount);
         return new Money(result, currency);

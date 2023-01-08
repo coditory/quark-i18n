@@ -63,6 +63,26 @@ class LoadI18nFromClasspathSpec extends Specification implements UsesInMemClassL
             messagesEn.getMessage("homepage.title") == "Homepage"
     }
 
+    def "should load a single i18n file"() {
+        given:
+            writeInMemClassPathFile("abc/i18n.yml", """
+            title:
+              en: Homepage
+              pl: Strona domowa
+            """)
+
+        when:
+            I18nMessagePack i18nMessagePack = scanInMemClassPath("abc/i18n.yml")
+
+        then:
+            I18nMessages messagesPl = i18nMessagePack.localize(PL_PL)
+            messagesPl.getMessage("title") == "Strona domowa"
+
+        and:
+            I18nMessages messagesEn = i18nMessagePack.localize(EN_US)
+            messagesEn.getMessage("title") == "Homepage"
+    }
+
     def "should load i18n files using locale from file path"() {
         given:
             writeInMemClassPathFile("com/acme/homepage/i18n-pl.yml", "homepage.title: Strona domowa")

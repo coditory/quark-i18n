@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -145,5 +146,21 @@ public final class Locales {
     @NotNull
     public static Optional<Locale> parseLocaleOrEmpty(@NotNull String value) {
         return Optional.ofNullable(parseLocaleOrNull(value));
+    }
+
+    public static boolean isSubLocale(@NotNull Locale parent, @NotNull Locale child) {
+        expectNonNull(parent, "parent");
+        expectNonNull(child, "child");
+        if (!Objects.equals(parent.getLanguage(), child.getLanguage())) {
+            return false;
+        }
+        if (!isNullOrEmpty(parent.getCountry()) && !Objects.equals(parent.getCountry(), child.getCountry())) {
+            return false;
+        }
+        return isNullOrEmpty(parent.getVariant()) || Objects.equals(parent.getVariant(), child.getVariant());
+    }
+
+    private static boolean isNullOrEmpty(String text) {
+        return text == null || text.isEmpty();
     }
 }

@@ -11,8 +11,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 final class ResourceScanner {
     static List<Resource> scanFiles(FileSystem fs, I18nPathPattern pathPattern) {
+        requireNonNull(fs);
+        requireNonNull(pathPattern);
         Path basePath = fs.getPath(pathPattern.getBaseDirectory());
         try {
             return scanFiles(basePath, pathPattern.getPattern().asMatchPredicate());
