@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/') == false
     steps:
+      - name: Debug dependabot condition
+        env:
+          GH_ACTOR: ${{ github.actor }}
+          GH_EVENT: ${{ github.event_name }}
+        run: |
+          echo "github.actor: $GH_ACTOR"
+          echo "github.event_name: $GH_EVENT"
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -39,7 +47,7 @@ jobs:
   dependabot:
     needs: [build]
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
+    if: ${{ github.actor == 'dependabot' && github.event_name == 'pull_request'}}
     steps:
       - name: Auto-merge Dependabot PRs
         run: gh pr merge --auto --merge "$PR_URL"
