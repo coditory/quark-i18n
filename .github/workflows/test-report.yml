@@ -2,7 +2,7 @@ name: Test Report
 
 on:
   workflow_run:
-    workflows: [ build ]
+    workflows: [build]
     types:
       - completed
 
@@ -10,9 +10,21 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - uses: dorny/test-reporter@v1
+      - name: Download Test Results
+        uses: actions/download-artifact@v3
+        with:
+          name: test-results
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
         with:
           artifact: test-results
           name: JUnit Tests
-          path: '*.xml'
+          path: '**/build/test-results/**/TEST*.xml'
           reporter: java-junit
+
+      - name: Publish Coverage Report
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: 'build/reports/jacoco/coverage/coverage.xml'

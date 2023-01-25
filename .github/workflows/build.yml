@@ -35,10 +35,6 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: '**/build/test-results/test/TEST-*.xml'
-
-      - name: Publish Coverage Report
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./build/reports/jacoco/coverage/coverage.xml
+          path: |
+            **/build/test-results/test/TEST-*.xml
+            **/build/reports/jacoco/coverage/coverage.xml
