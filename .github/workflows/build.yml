@@ -2,6 +2,10 @@ name: Build
 
 on: [push, pull_request, workflow_dispatch]
 
+permissions: # required by test-report
+  statuses: write
+  checks: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
