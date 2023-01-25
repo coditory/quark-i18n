@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     if: |
-      github.event_name != "pull_request" ||
-      github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,11 +39,15 @@ jobs:
               body: '❌ ${{ github.workflow }} failed: ${{ steps.gradle.outputs.build-scan-url }}'
             })
 
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
-        if: always()
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
         with:
-          name: test-results
-          path: |
-            **/build/test-results/test/TEST-*.xml
-            **/build/reports/jacoco/coverage/coverage.xml
+          name: JUnit Tests
+          path: '**/build/test-results/**/TEST*.xml'
+          reporter: java-junit
+
+      - name: Publish Coverage Report
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: 'build/reports/jacoco/coverage/coverage.xml'
