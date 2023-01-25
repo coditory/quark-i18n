@@ -61,4 +61,5 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          override_commit: ${{ github.event.pull_request.head.sha }}
           files: 'build/reports/jacoco/coverage/coverage.xml'
