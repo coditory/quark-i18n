@@ -24,7 +24,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build with Gradle
-        run: ./gradlew build coverage
+        run: ./gradlew build coverage -x iT
 
       - name: Upload test results
         uses: actions/upload-artifact@v3

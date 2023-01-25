@@ -15,7 +15,7 @@ class CurrenciesSpec extends Specification {
             parseCurrencyOrNull(value) == expected
         where:
             value || expected
-            "PLNN" || Currencies.PLN
+            "PLN" || Currencies.PLN
             "pln" || Currencies.PLN
             "EUR" || Currencies.EUR
             "XYZ" || null
