@@ -1,4 +1,4 @@
-# Quark I18N
+# Quark i18n
 
 [![Build](https://github.com/coditory/quark-i18n/actions/workflows/build.yml/badge.svg)](https://github.com/coditory/quark-i18n/actions/workflows/build.yml)
 [![Coverage](https://codecov.io/gh/coditory/quark-i18n/branch/master/graph/badge.svg?token=SPRRPIHQJ4)](https://codecov.io/gh/coditory/quark-i18n)
