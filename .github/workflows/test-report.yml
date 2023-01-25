@@ -53,10 +53,9 @@ jobs:
 
       - name: Publish Coverage Report
         uses: codecov/codecov-action@v3
-        env:
-          GITHUB_ACTION: ${{ github.event.workflow_run.name }}
-          GITHUB_RUN_ID: ${{ github.event.workflow_run.id }}
-          GITHUB_SHA: ${{ github.event.workflow_run.head_sha }}
-          GITHUB_HEAD_REF: ${{ github.event.workflow_run.head_branch }}
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          override_commit: ${{ github.event.workflow_run.head_sha }}
+          override_branch: ${{ github.event.workflow_run.head_branch }}
+          override_build: ${{ github.event.workflow_run.id }}
           files: 'build/reports/jacoco/coverage/coverage.xml'
