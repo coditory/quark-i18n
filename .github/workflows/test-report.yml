@@ -14,11 +14,6 @@ jobs:
       - name: Dump GitHub context
         id: github_context_step
         run: echo '${{ toJSON(github) }}'
-    
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Download test results
         uses: actions/github-script@v6
@@ -44,8 +39,6 @@ jobs:
       - name: Unzip test results
         run: unzip test-results.zip
 
-      - run: ls -la
-
       - name: Publish Test Report
         uses: dorny/test-reporter@v1
         with:
@@ -55,7 +48,10 @@ jobs:
 
       - name: Publish Coverage Report
         uses: codecov/codecov-action@v3
+        env:
+          GITHUB_ACTION: ${{ github.event.workflow_run.name }}
+          GITHUB_RUN_ID: ${{ github.event.workflow_run.id }}
+          GITHUB_SHA: ${{ github.event.workflow_run.head_sha }}
+          GITHUB_HEAD_REF: ${{ github.event.workflow_run.head_branch }}
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          override_commit: ${{ github.event.pull_request.head.sha }}
           files: 'build/reports/jacoco/coverage/coverage.xml'
