@@ -16,5 +16,5 @@ Please use the `Spec.groovy` suffix on new test classes.
 ## Validate changes locally
 Before submitting a pull request test your changes locally on a sample project.
 There are few ways for local testing:
-- simply use the [sample subproject](https://github.com/coditory/quark-context/tree/master/sample)
+- simply use the [sample subproject](https://github.com/coditory/quark-i18n/tree/master/sample)
 - or publish library to maven local repository with `./gradlew publishToMavenLocal`

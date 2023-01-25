@@ -1,22 +1,36 @@
-# Quark I18N
+# Quark i18n
 
 [![Build](https://github.com/coditory/quark-i18n/actions/workflows/build.yml/badge.svg)](https://github.com/coditory/quark-i18n/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/github/coditory/quark-i18n/badge.svg)](https://coveralls.io/github/coditory/quark-i18n)
+[![Coverage](https://codecov.io/gh/coditory/quark-i18n/branch/master/graph/badge.svg?token=SPRRPIHQJ4)](https://codecov.io/gh/coditory/quark-i18n)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.coditory.quark/quark-i18n/badge.svg)](https://mvnrepository.com/artifact/com.coditory.quark/quark-i18n)
 
-**🚧 This library as under heavy development until release of version `1.x.x` 🚧**
+**🚧 This library as under heavy development until release of version `1.x.x`🚧**
 
-> Advanced i18n message resolution java library. Provides missing capabilities of
-> java [ResourceBundle](https://www.baeldung.com/java-resourcebundle). Uses [icu4j](https://github.com/unicode-org/icu)
-> for standardized message formatting.
+> Updated approch to i18n and java [ResourceBundles](https://www.baeldung.com/java-resourcebundle).
+> Uses [icu4j](https://github.com/unicode-org/icu) for standardized message formatting and solves multiple pain points.
 
-- [ICU Message formatting](#message-formatting)
-- [Message resolution with fallbacks and prefixed queries](#message-resolution)
-- [Message references](#message-references)
-- [Missing message handling and detection](#missing-messages)
-- [Flexible message loading](#message-loading)
-- [DevMode](#devmode)
-- [Other features](#other-features)
+* [Installation](#installation)
+* [Basic usage](#basic-usage)
+* [Message formatting](#message-formatting)
+* [Message loading](#message-loading)
+  * [Manual messages creation](#manual-messages-creation)
+  * [Loading messages from classpath or file system](#loading-messages-from-classpath-or-file-system)
+  * [Single message file with multiple locales](#single-message-file-with-multiple-locales)
+  * [Watching for file changes](#watching-for-file-changes)
+* [Message resolution](#message-resolution)
+  * [Message fallbacks](#message-fallbacks)
+  * [Prefixed queries](#prefixed-queries)
+  * [Localized queries](#localized-queries)
+* [Message references](#message-references)
+  * [Reference resolution order](#reference-resolution-order)
+  * [References in a prefixed file](#references-in-a-prefixed-file)
+* [Type based formatters](#type-based-formatters)
+* [Missing messages](#missing-messages)
+  * [Missing message handler](#missing-message-handler)
+  * [Missing message detection](#missing-message-detection)
+* [Whitespace normalization](#whitespace-normalization)
+* [DevMode](#devmode)
+
 
 ## Installation
 
@@ -341,7 +355,9 @@ I18nMessages messages = I18nMessagePack.builder()
 messages.getMessage("msg", new Foo(123.456)) == "00123.45600"
 ```
 
-## Missing message handler
+## Missing messages
+
+### Missing message handler
 
 When message is missing, exception is thrown. This mechanism can be changed with:
 
@@ -353,7 +369,7 @@ i18nMessagePackBuilder.setMissingMessageHandler(customHandler);
 i18nMessagePackBuilder.usePathOnMissingMessage()
 ```
 
-## Missing message detection
+### Missing message detection
 
 It's important to find about missing messages as quickly as possible
 and avoid finding them on production.
@@ -364,7 +380,7 @@ i18nMessagePackBuilder.validateNoMissingMessages() - throws exception on missing
 i18nMessagePackBuilder.logMissingMessages() - simply logs a report about missing messages
 ```
 
-### Missing message sample report
+#### Missing message sample report
 
 ```java
 I18nMessagePack.builder()
@@ -390,7 +406,7 @@ Sources: en_US, pl_PL
 Total: 2
 ```
 
-### Skipping paths during missing message detection
+#### Skipping paths during missing message detection
 
 It's common to store glossary type of messages in the default language.
 Those kind of values are deliberately defined in a single place and should not be detected as missing in other locales.
