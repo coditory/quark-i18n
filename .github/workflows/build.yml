@@ -13,10 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Dump GitHub context
-        id: github_context_step
-        run: echo '${{ toJSON(github) }}'
-
       - name: Setup jdk
         uses: actions/setup-java@v3
         with:
@@ -28,21 +24,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build with Gradle
-        id: gradle
         run: ./gradlew build coverage
-
-      - name: Publish build scan URL
-        uses: actions/github-script@v6
-        if: failure()
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ ${{ github.workflow }} failed: ${{ steps.gradle.outputs.build-scan-url }}'
-            })
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
