@@ -4,7 +4,7 @@ about: Suggest new features/changes
 labels: feature
 ---
 <!-- Your feature request may already be reported! -->
-<!-- Please search in the [issues](https://github.com/coditory/quark-context/issues) before creating a new one. -->
+<!-- Please search in the [issues](https://github.com/coditory/quark-i18n/issues) before creating a new one. -->
 
 ## Context
 <!--- What are you trying to accomplish? -->

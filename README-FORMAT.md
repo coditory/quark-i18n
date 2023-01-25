@@ -17,7 +17,7 @@ greeting: Hello {0}
 ```
 
 ```java
-messages.getMessage("greeting","John")=="Hello John"
+messages.getMessage("greeting","John") == "Hello John"
 ```
 
 ## Named Argument
@@ -29,7 +29,7 @@ Hello {name}
 ```
 
 ```java
-messages.getMessage("greeting",Map.of("name","John"))=="Hello John"
+messages.getMessage("greeting", Map.of("name","John")) == "Hello John"
 ```
 
 ## Formatted argument
@@ -103,7 +103,7 @@ If you don't like it, you can skip it using:
 
 ```java
 // Disabling Java8 time types conversion
-I18nMessagePack messages=I18nMessagePack.builder()
+I18nMessagePack messages = I18nMessagePack.builder()
         .disableJava8ArgumentTransformers()
         .build()
 ```
@@ -123,7 +123,7 @@ I18nMessagePack messages=I18nMessagePack.builder()
 - `{0, date,yyyy-MM-dd'T'HH:mm:ss.SSS zz}` -
   uses [SimpleDateFormat](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/SimpleDateFormat.html)
 - `{0, date, ::dMMMM}` -
-  uses [ICU skeleton](https://unicode-org.github.io/icu/userguide/format_parse/datetime
+  uses [ICU skeleton](https://unicode-org.github.io/icu/userguide/format_parse/datetime)
 
 ## Format type: select
 

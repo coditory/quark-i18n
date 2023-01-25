@@ -4,7 +4,7 @@ about: Reporting bugs and other issues
 labels: bug
 ---
 <!-- The bug you're experiencing might have already be reported! -->
-<!-- Please search in the [issues](https://github.com/coditory/quark-context/issues) before creating one. -->
+<!-- Please search in the [issues](https://github.com/coditory/quark-i18n/issues) before creating one. -->
 
 ## Context
 <!-- How has this issue affected you? What are you trying to accomplish? -->
