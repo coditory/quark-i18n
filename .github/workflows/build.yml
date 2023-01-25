@@ -28,10 +28,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build with Gradle
+        id: gradle
         run: ./gradlew build coverage
 
       - name: Publish build scan URL
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         if: failure()
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
