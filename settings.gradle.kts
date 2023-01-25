@@ -13,13 +13,11 @@ dependencyResolutionManagement {
 }
 
 gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-
-        if (!System.getenv("CI").isNullOrEmpty()) {
+    if (!System.getenv("CI").isNullOrEmpty()) {
+        buildScan {
             publishAlways()
-            tag("CI")
+            termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            termsOfServiceAgree = "yes"
         }
     }
 }
