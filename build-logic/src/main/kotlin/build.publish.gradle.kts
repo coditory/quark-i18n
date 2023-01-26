@@ -23,6 +23,8 @@ java {
     }
 }
 
+group = "com.coditory.quark"
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
