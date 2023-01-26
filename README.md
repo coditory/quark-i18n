@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/coditory/quark-i18n/branch/master/graph/badge.svg?token=SPRRPIHQJ4)](https://codecov.io/gh/coditory/quark-i18n)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.coditory.quark/quark-i18n/badge.svg)](https://mvnrepository.com/artifact/com.coditory.quark/quark-i18n)
 
-**🚧 This library as under heavy development until release of version `1.x.x`🚧**
+**🚧 This library as under heavy development until release of version `1.x.x` 🚧**
 
 > Updated approch to i18n and java [ResourceBundles](https://www.baeldung.com/java-resourcebundle).
 > Uses [icu4j](https://github.com/unicode-org/icu) for standardized message formatting and solves multiple pain points.
