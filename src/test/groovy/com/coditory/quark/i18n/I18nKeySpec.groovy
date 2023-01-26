@@ -8,7 +8,7 @@ class I18nKeySpec extends Specification {
         when:
             I18nKey key = I18nKey.of(Locales.EN_US, "a.b.c")
         then:
-            key.toShortString() == "en-US:a.b.c"
+            key.toShortString() == "en-US:a.b.c.d"
             key.pathValue() == "a.b.c"
             key.path() == I18nPath.of("a", "b", "c")
             key.locale() == Locales.EN_US
