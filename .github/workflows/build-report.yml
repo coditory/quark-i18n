@@ -41,12 +41,10 @@ jobs:
         run: unzip build-reports.zip
 
       - name: Publish Test Report
-        uses: dorny/test-reporter@v1
+        uses: mikepenz/action-junit-report@v3
         continue-on-error: true
         with:
-          name: JUnit Tests
-          path: '**/build/test-results/**/TEST*.xml'
-          reporter: java-junit
+          report_paths: '**/build/test-results/**/TEST*.xml'
 
       - name: Publish Coverage Report
         uses: codecov/codecov-action@v3
