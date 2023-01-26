@@ -123,7 +123,7 @@ I18nMessagePack messages=I18nMessagePack.builder()
 - `{0, date,yyyy-MM-dd'T'HH:mm:ss.SSS zz}` -
   uses [SimpleDateFormat](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/SimpleDateFormat.html)
 - `{0, date, ::dMMMM}` -
-  uses [ICU skeleton](https://unicode-org.github.io/icu/userguide/format_parse/datetime
+  uses [ICU skeleton](https://unicode-org.github.io/icu/userguide/format_parse/datetime)
 
 ## Format type: select
 
