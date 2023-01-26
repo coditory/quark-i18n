@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  download_build_reports:
+  report:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
     steps:
@@ -44,6 +44,8 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         continue-on-error: true
         with:
+          commit: ${{ github.event.workflow_run.head_sha }}
+          annotations_limit: 10
           report_paths: '**/build/test-results/**/TEST*.xml'
 
       - name: Publish Coverage Report
