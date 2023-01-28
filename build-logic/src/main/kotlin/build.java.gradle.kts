@@ -11,11 +11,6 @@ java {
     }
 }
 
-dependencies {
-    api(libs.slf4j.api)
-    api(libs.jetbrains.annotations)
-}
-
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs.addAll(listOf("-Werror", "-Xlint", "-Xlint:-serial"))

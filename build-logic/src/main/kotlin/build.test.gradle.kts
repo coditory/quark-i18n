@@ -17,8 +17,14 @@ testing {
         val integrationTest by registering(JvmTestSuite::class) {
             testType.set(TestSuiteType.INTEGRATION_TEST)
 
-            dependencies {
-                implementation(project())
+            val mainSourceSet = project.sourceSets.main.get()
+            val testSourceSet = project.sourceSets.test.get()
+
+            sources {
+                compileClasspath += testSourceSet.output +
+                    mainSourceSet.output + testSourceSet.compileClasspath
+                runtimeClasspath += testSourceSet.output +
+                    mainSourceSet.output + testSourceSet.runtimeClasspath
             }
 
             targets {
@@ -32,14 +38,6 @@ testing {
     }
 }
 
-val integrationTestImplementation by configurations.getting {
-    extendsFrom(configurations.testImplementation.get())
-}
-
-val integrationTestRuntimeOnly by configurations.getting {
-    extendsFrom(configurations.testRuntimeOnly.get())
-}
-
 tasks.named("check") {
     dependsOn(testing.suites.named("integrationTest"))
 }
@@ -51,7 +49,8 @@ tasks.withType<Test>().configureEach {
             TestLogEvent.FAILED,
             TestLogEvent.STANDARD_ERROR,
             TestLogEvent.STANDARD_OUT,
-            TestLogEvent.SKIPPED
+            TestLogEvent.SKIPPED,
+            TestLogEvent.PASSED
         )
         exceptionFormat = TestExceptionFormat.FULL
         showExceptions = true
