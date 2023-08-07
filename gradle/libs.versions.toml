@@ -18,4 +18,4 @@ icu4j = { module = "com.ibm.icu:icu4j", version = "73.2" }
 # test dependencies
 spock-core = { module = "org.spockframework:spock-core", version = "2.3-groovy-4.0" }
 awaitility = { module = "org.awaitility:awaitility", version = "4.2.0" }
-logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.4.7" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.4.9" }
