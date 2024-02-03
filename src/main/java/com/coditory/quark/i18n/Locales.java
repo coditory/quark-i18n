@@ -118,7 +118,7 @@ public final class Locales {
         expectNonNull(value, "value");
         Locale locale;
         try {
-            locale = Locale.forLanguageTag(value.replace("_", "-").trim());
+            locale = Locale.forLanguageTag(value);
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not parse Locale: '" + value + "'");
         }
@@ -131,7 +131,8 @@ public final class Locales {
     @Nullable
     public static Locale parseLocaleOrNull(@NotNull String value) {
         try {
-            return parseLocale(value);
+            Locale locale = Locale.forLanguageTag(value);
+            return isAvailable(locale) ? locale : null;
         } catch (Exception e) {
             return null;
         }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 import static java.util.Collections.unmodifiableMap;
@@ -50,6 +51,7 @@ public final class Currencies {
      */
     public static final Currency PLN = Currency.getInstance("PLN");
 
+    private static final Set<Currency> AVAILABLE_CURRENCIES = Currency.getAvailableCurrencies();
     private static final Map<Currency, Locale> LOCALE_BY_CURRENCY;
 
     static {
@@ -107,9 +109,7 @@ public final class Currencies {
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not parse Currency: '" + value + "'");
         }
-        boolean isAvailable = Currency.getAvailableCurrencies()
-                .contains(currency);
-        if (!isAvailable) {
+        if (!AVAILABLE_CURRENCIES.contains(currency)) {
             throw new IllegalArgumentException("Currency not available: '" + value + "'");
         }
         return currency;
@@ -118,7 +118,8 @@ public final class Currencies {
     @Nullable
     public static Currency parseCurrencyOrNull(@NotNull String value) {
         try {
-            return parseCurrency(value);
+            Currency currency = Currency.getInstance(value.toUpperCase(Locale.ROOT).trim());
+            return AVAILABLE_CURRENCIES.contains(currency) ? currency : null;
         } catch (Exception e) {
             return null;
         }

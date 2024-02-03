@@ -17,8 +17,8 @@ class LocalesSpec extends Specification {
             value   || expected
             "pl"    || Locales.PL
             "pl-PL" || Locales.PL_PL
-            "pl_PL" || Locales.PL_PL
-            "PL_PL" || Locales.PL_PL
+            "pl-pl" || Locales.PL_PL
+            "PL-PL" || Locales.PL_PL
             "xx"    || null
             "xx-XX" || null
     }
