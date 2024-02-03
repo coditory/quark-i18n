@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -36,7 +37,7 @@ import static java.util.stream.Collectors.toSet;
 final class ClassPath {
     private static final Logger logger = LoggerFactory.getLogger(ClassPath.class.getName());
     private static final String CLASS_FILE_NAME_EXTENSION = ".class";
-    private static final String PATH_SEPARATOR_SYS_PROP = System.getProperty("path.separator");
+    private static final String PATH_SEPARATOR_SYS_PROP = File.pathSeparator;
     private static final String JAVA_CLASS_PATH_SYS_PROP = System.getProperty("java.class.path");
     private final Set<ResourceInfo> resources;
 
@@ -336,10 +337,12 @@ final class ClassPath {
             try {
                 try {
                     urls.add(new File(entry).toURI().toURL());
-                } catch (SecurityException e) { // File.toURI checks to see if the file is a directory
-                    urls.add(new URL("file", null, new File(entry).getAbsolutePath()));
+                } catch (SecurityException e) {
+                    // File.toURI checks to see if the file is a directory
+                    URI uri = new URI("file", null, new File(entry).getAbsolutePath(), null);
+                    urls.add(uri.toURL());
                 }
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException|URISyntaxException e) {
                 logger.warn("Malformed classpath entry: " + entry, e);
             }
         }
@@ -347,7 +350,7 @@ final class ClassPath {
     }
 
     private static URL getClassPathEntry(File jarFile, String path) throws MalformedURLException {
-        return new URL(jarFile.toURI().toURL(), path);
+        return jarFile.toURI().resolve(path).toURL();
     }
 
     private static String getClassName(String filename) {

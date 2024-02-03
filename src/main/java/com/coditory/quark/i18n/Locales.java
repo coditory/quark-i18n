@@ -105,10 +105,10 @@ public final class Locales {
     public static Locale generalize(@NotNull Locale locale) {
         expectNonNull(locale, "locale");
         if (!locale.getVariant().isEmpty()) {
-            return new Locale(locale.getLanguage(), locale.getCountry());
+            return Locale.of(locale.getLanguage(), locale.getCountry());
         }
         if (!locale.getCountry().isEmpty()) {
-            return new Locale(locale.getLanguage());
+            return Locale.of(locale.getLanguage());
         }
         return null;
     }
