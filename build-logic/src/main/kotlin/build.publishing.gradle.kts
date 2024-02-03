@@ -7,7 +7,7 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin")
 }
 
-group = "com.coditory.quark.i18n"
+group = "com.coditory.quark"
 description = "Quark internationalization library"
 
 publishing {
