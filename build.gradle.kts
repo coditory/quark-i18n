@@ -5,6 +5,7 @@ plugins {
     id("build.test")
     id("build.coverage")
     id("build.publishing")
+    alias(libs.plugins.nexusPublish)
 }
 
 dependencies {
@@ -17,4 +18,14 @@ dependencies {
     testImplementation(libs.spock.core)
     testImplementation(libs.awaitility)
     integrationTestImplementation(libs.jimfs)
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            System.getenv("OSSRH_STAGING_PROFILE_ID")?.let { stagingProfileId = it }
+            System.getenv("OSSRH_USERNAME")?.let { username.set(it) }
+            System.getenv("OSSRH_PASSWORD")?.let { password.set(it) }
+        }
+    }
 }
