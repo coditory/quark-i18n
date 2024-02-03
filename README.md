@@ -6,7 +6,7 @@
 
 **🚧 This library as under heavy development until release of version `1.x.x` 🚧**
 
-> Updated approch to i18n and java [ResourceBundles](https://www.baeldung.com/java-resourcebundle).
+> Updated approach to i18n and java [ResourceBundles](https://www.baeldung.com/java-resourcebundle).
 > Uses [icu4j](https://github.com/unicode-org/icu) for standardized message formatting and solves multiple pain points.
 
 * [Installation](#installation)
@@ -256,7 +256,7 @@ Query localization mechanism can be used together with query prefixes:
 ```java
 I18nMessages messages = messagePack
     .prefixQueries("pages.homepage")
-    .localize(req.getLocale())
+    .localize(req.getLocale());
 ```
 
 ## Message references
@@ -366,7 +366,7 @@ When message is missing, exception is thrown. This mechanism can be changed with
 i18nMessagePackBuilder.setMissingMessageHandler(customHandler);
 
 // ...or simply return message path when message is missing
-i18nMessagePackBuilder.usePathOnMissingMessage()
+i18nMessagePackBuilder.usePathOnMissingMessage();
 ```
 
 ### Missing message detection
@@ -388,7 +388,7 @@ I18nMessagePack.builder()
       .addMessage(PL_PL, "hello", "Cześć")
       .addMessage(DE_DE, "bye", "Tschüss")
       .logMissingMessages()
-      .build()
+      .build();
 ```
 
 Will generate following report:
@@ -424,7 +424,7 @@ I18nMessagePack.builder()
     .addMessage(EN_GB, "x", "X")
     .addMessage(PL_PL, "x", "X")
     .detectMissingMessages(detector)
-    .build()
+    .build();
 
 // to skip a.b.c.d use one of sample path patterns as a skipPath:
 // - "a.b.c.d",
@@ -458,7 +458,7 @@ I18nMessagePackBuidler messagesBuilder = I18nMessagePack.builder()
  
 I18nMessagePack messages = devMode
   ? messagesBuilder.scanFileSystem("src/main/resources/i18n/*").buildAndWatchForChanges()
-  : messagesBuilder.scanClassPath("i18n/*").build()
+  : messagesBuilder.scanClassPath("i18n/*").build();
 ```
 
 Following setup will load messages directly from project structure and watch for changes.
