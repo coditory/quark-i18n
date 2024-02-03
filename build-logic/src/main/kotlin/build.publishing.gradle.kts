@@ -4,7 +4,11 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    id("io.github.gradle-nexus.publish-plugin")
 }
+
+group = "com.coditory.quark.i18n"
+description = "Quark internationalization library"
 
 publishing {
     publications.create<MavenPublication>("jvm") {
@@ -20,8 +24,8 @@ publishing {
         }
         pom {
             name.set(project.archivesName.get())
-            description.set(project.description ?: rootProject.description ?: "Kotlin logging library")
-            url.set("https://github.com/coditory/klog")
+            description.set(project.description ?: rootProject.description)
+            url.set("https://github.com/coditory/quark-i18n")
             organization {
                 name = "Coditory"
                 url = "https://coditory.com"
@@ -40,12 +44,12 @@ publishing {
                 }
             }
             scm {
-                connection.set("scm:git:git://github.com/coditory/klog.git")
-                url.set("https://github.com/coditory/klog")
+                connection.set("scm:git:git://github.com/coditory/quark-i18n.git")
+                url.set("https://github.com/coditory/quark-i18n")
             }
             issueManagement {
                 system.set("GitHub")
-                url.set("https://github.com/coditory/klog/issues")
+                url.set("https://github.com/coditory/quark-i18n/issues")
             }
         }
     }
@@ -61,5 +65,15 @@ signing {
 tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            System.getenv("OSSRH_STAGING_PROFILE_ID")?.let { stagingProfileId = it }
+            System.getenv("OSSRH_USERNAME")?.let { username.set(it) }
+            System.getenv("OSSRH_PASSWORD")?.let { password.set(it) }
+        }
     }
 }
