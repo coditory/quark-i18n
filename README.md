@@ -1,6 +1,6 @@
 # Quark i18n
 
-[![Build](https://github.com/coditory/quark-i18n/actions/workflows/build.yml/badge.svg)](https://github.com/coditory/quark-i18n/actions/workflows/build.yml)
+[![Build](https://github.com/coditory/quark-i18n/actions/workflows/build.yml/badge.svg?query=branch%3Amain)](https://github.com/coditory/quark-i18n/actions/workflows/build.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/coditory/quark-i18n/branch/master/graph/badge.svg?token=SPRRPIHQJ4)](https://codecov.io/gh/coditory/quark-i18n)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.coditory.quark/quark-i18n/badge.svg)](https://mvnrepository.com/artifact/com.coditory.quark/quark-i18n)
 
