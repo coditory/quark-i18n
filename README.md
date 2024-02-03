@@ -283,7 +283,7 @@ messages.getMessage("about-company") == "ACME was established on 1988"
   with `i18nMessagePackBuilder.addReferenceFallbackKeyPrefix()` ([example](#sample-reference-resolution))
 - References in prefixed files are prefixed as
   well `${foo} -> ${<file-prefix>.foo}` ([example](#sample-reference-resolution-from-a-prefixed-file))
-- References have short notation `$common.reference` and long one `${common.reference}`. The long one is useful when
+- References can have a short notation `$common.reference` and long one `${common.reference}`. The long one is useful when
   there reference is placed next to `[a-zA-Z0-9-_]`, like in `abc${common.reference}abc$`.
 
 ### Reference resolution order
@@ -351,7 +351,7 @@ I18nMessages messages = I18nMessagePack.builder()
     .addMessage(EN, "msg", "{0,number,00000.00000}")
     .addArgumentTransformer(Foo, (foo) -> foo.getSomeNumber())
     .buildLocalized(EN);
-        
+
 messages.getMessage("msg", new Foo(123.456)) == "00123.45600"
 ```
 
@@ -455,7 +455,7 @@ You can use file watching capabilities to speed up the development cycle:
 I18nMessagePackBuidler messagesBuilder = I18nMessagePack.builder()
     .setDefaultLocale(EN_US);
     // ... other common settings
- 
+
 I18nMessagePack messages = devMode
   ? messagesBuilder.scanFileSystem("src/main/resources/i18n/*").buildAndWatchForChanges()
   : messagesBuilder.scanClassPath("i18n/*").build();
