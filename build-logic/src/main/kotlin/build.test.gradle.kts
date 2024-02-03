@@ -11,7 +11,7 @@ plugins {
 val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
 
 dependencies {
-    testImplementation("org.apache.groovy:groovy:4.0.18")
+    testImplementation(libs.groovy)
 }
 
 testing {
