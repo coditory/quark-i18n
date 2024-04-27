@@ -74,8 +74,8 @@ final class DebugErrorThrowingI18NMissingMessageHandler implements I18nMissingMe
         String argsStringInParenthesis = argsString.isEmpty() ? "" : "(" + argsString.substring(1, argsString.length() - 1) + ')';
         String keys = StreamSupport.stream(checked.spliterator(), false)
                 .map(I18nKey::toShortString)
-                .collect(Collectors.joining("\n"));
-        throw new I18nMessagesException(format("Missing message %s%s\nChecked i18n keys:\n%s", key.toShortString(), argsStringInParenthesis, keys));
+                .collect(Collectors.joining("\n  "));
+        throw new I18nMessagesException(format("Missing message %s%s. Checked keys:\n  %s", key.toShortString(), argsStringInParenthesis, keys));
     }
 
     @Override
@@ -86,7 +86,7 @@ final class DebugErrorThrowingI18NMissingMessageHandler implements I18nMissingMe
         String argsStringInParenthesis = argsString.isEmpty() ? "" : "(" + argsString.substring(1, argsString.length() - 1) + ')';
         String keys = StreamSupport.stream(checked.spliterator(), false)
                 .map(I18nKey::toShortString)
-                .collect(Collectors.joining("\n"));
-        throw new I18nMessagesException(format("Missing message %s%s\nChecked i18n keys:\n%s", key.toShortString(), argsStringInParenthesis, keys));
+                .collect(Collectors.joining("\n  "));
+        throw new I18nMessagesException(format("Missing message %s%s. Checked keys:\n  %s", key.toShortString(), argsStringInParenthesis, keys));
     }
 }

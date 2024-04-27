@@ -6,6 +6,7 @@ import static com.coditory.quark.i18n.I18nMessagePackFactory.emptyMessagePack
 import static com.coditory.quark.i18n.Locales.EN
 import static com.coditory.quark.i18n.Locales.EN_US
 import static com.coditory.quark.i18n.Locales.PL
+import static com.coditory.quark.i18n.Locales.PL_PL
 
 class MissingMessageSpec extends Specification {
     def "should throw error for missing message"() {
@@ -60,5 +61,26 @@ class MissingMessageSpec extends Specification {
             String result = messages.getMessage("home.bye")
         then:
             result == "home.bye"
+    }
+
+    def "should throw error with debug info for missing message with indexed arguments"() {
+        given:
+            I18nMessagePack messages = I18nMessagePack.builder()
+                    .setMissingMessageHandler(I18nMissingMessageHandler.debugErrorThrowingHandler())
+                    .prefixQueries("", "fallback")
+                    .setDefaultLocale(PL_PL)
+                    .build()
+        when:
+            messages.getMessage(EN_US, "home.xxx", 123, "xyz")
+        then:
+            I18nMessagesException e = thrown(I18nMessagesException)
+            e.message == "Missing message en-US:home.xxx(123, xyz). Checked keys:\n  " + List.of("en-US:home.xxx",
+                    "en:home.xxx",
+                    "en-US:fallback.home.xxx",
+                    "en:fallback.home.xxx",
+                    "pl-PL:home.xxx",
+                    "pl:home.xxx",
+                    "pl-PL:fallback.home.xxx",
+                    "pl:fallback.home.xxx").join("\n  ")
     }
 }
