@@ -127,7 +127,7 @@ public interface I18nMessagePack extends Closeable {
 
     @NotNull
     default I18nMessagePack prefixQueries(@NotNull String... prefixes) {
-        expectNonNull(prefixes, "prefix");
+        expectNonNull(prefixes, "prefixes");
         List<I18nPath> paths = Arrays.stream(prefixes).map(I18nPath::of).toList();
         return prefixQueries(paths);
     }

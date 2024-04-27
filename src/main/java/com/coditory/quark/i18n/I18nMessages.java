@@ -3,6 +3,7 @@ package com.coditory.quark.i18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -86,8 +87,21 @@ public final class I18nMessages {
     }
 
     @NotNull
-    public I18nMessages addMessagePrefix(@NotNull String prefix) {
-        return messagePack.prefixQueries(prefix).localize(locale);
+    public I18nMessages prefixQueries(@NotNull List<I18nPath> prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return messagePack.prefixQueries(prefixes).localize(locale);
+    }
+
+    @NotNull
+    public I18nMessages prefixQueries(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return messagePack.prefixQueries(prefixes).localize(locale);
+    }
+
+    @NotNull
+    public I18nMessages prefixQueries(@NotNull String... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return messagePack.prefixQueries(prefixes).localize(locale);
     }
 
     @NotNull
