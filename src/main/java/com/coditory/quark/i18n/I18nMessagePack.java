@@ -3,6 +3,7 @@ package com.coditory.quark.i18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Closeable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -12,7 +13,7 @@ import static com.coditory.quark.i18n.I18nMessages.EMPTY_ARGS;
 import static com.coditory.quark.i18n.Preconditions.expectNonBlank;
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 
-public interface I18nMessagePack {
+public interface I18nMessagePack extends Closeable {
     static I18nMessagePackBuilder builder() {
         return new I18nMessagePackBuilder();
     }
@@ -129,5 +130,10 @@ public interface I18nMessagePack {
         expectNonNull(prefixes, "prefix");
         List<I18nPath> paths = Arrays.stream(prefixes).map(I18nPath::of).toList();
         return prefixQueries(paths);
+    }
+
+    @Override
+    default void close() {
+        // implementation optional
     }
 }

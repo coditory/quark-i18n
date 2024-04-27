@@ -88,4 +88,9 @@ public final class Reloadable18nMessagePack implements I18nMessagePack {
     public String format(@NotNull Locale locale, @NotNull String template, @NotNull Map<String, Object> args) {
         return i18nMessagePack.format(locale, template, args);
     }
+
+    @Override
+    public void close() {
+        loader.stopWatching();
+    }
 }
