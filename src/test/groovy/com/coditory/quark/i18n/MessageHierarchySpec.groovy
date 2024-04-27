@@ -80,7 +80,7 @@ class MessageHierarchySpec extends Specification {
                     .addMessage(EN_GB, "b", "en-GB:b")
                     .addMessage(EN_GB, "c", "en-GB:c")
             // common settings
-                    .addMessageFallbackKeyPrefix("fallback")
+                    .prefixQueries("", "fallback")
                     .setDefaultLocale(PL_PL)
                     .build()
         when:

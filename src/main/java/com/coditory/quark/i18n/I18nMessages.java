@@ -86,7 +86,7 @@ public final class I18nMessages {
     }
 
     @NotNull
-    public I18nMessages prefixQueries(@NotNull String prefix) {
+    public I18nMessages addMessagePrefix(@NotNull String prefix) {
         return messagePack.prefixQueries(prefix).localize(locale);
     }
 

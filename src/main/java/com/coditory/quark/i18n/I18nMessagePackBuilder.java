@@ -21,14 +21,14 @@ import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 
 public final class I18nMessagePackBuilder {
     private final AggregatedI18nLoader loader = new AggregatedI18nLoader();
-    private final List<I18nPath> referenceFallbackPaths = new ArrayList<>();
-    private final List<I18nPath> messageFallbackPaths = new ArrayList<>();
     private final List<I18nArgTransformer<?>> argTransformers = new ArrayList<>();
     private I18nMissingMessageHandler missingMessageHandler = I18nMissingMessageHandler.errorThrowingHandler();
     private Locale defaultLocale;
     private boolean transformJava8TimeTypes = true;
     private boolean normalizeWhitespaces = false;
     private boolean resolveReferences = true;
+    private List<I18nPath> referencePrefixes = new ArrayList<>();
+    private List<I18nPath> queryPrefixes = new ArrayList<>();
     private I18nMissingMessagesDetector missingMessagesDetector;
 
     I18nMessagePackBuilder() {
@@ -38,8 +38,8 @@ public final class I18nMessagePackBuilder {
     private I18nMessagePackBuilder copy() {
         I18nMessagePackBuilder builder = new I18nMessagePackBuilder();
         builder.loader.addLoader(loader.copy());
-        builder.referenceFallbackPaths.addAll(referenceFallbackPaths);
-        builder.messageFallbackPaths.addAll(messageFallbackPaths);
+        builder.referencePrefixes.addAll(referencePrefixes);
+        builder.queryPrefixes.addAll(queryPrefixes);
         builder.argTransformers.addAll(argTransformers);
         builder.missingMessageHandler = missingMessageHandler;
         builder.defaultLocale = defaultLocale;
@@ -251,71 +251,43 @@ public final class I18nMessagePackBuilder {
     }
 
     @NotNull
-    public I18nMessagePackBuilder addReferenceFallbackKeyPrefixes(@NotNull List<String> keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        keyPrefixes.forEach(this::addReferenceFallbackKeyPrefix);
+    public I18nMessagePackBuilder prefixReferenceQueries(@NotNull List<I18nPath> prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        this.referencePrefixes = List.copyOf(prefixes);
         return this;
     }
 
     @NotNull
-    public I18nMessagePackBuilder addReferenceFallbackKeyPrefixes(@NotNull String... keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        Arrays.stream(keyPrefixes).forEach(this::addReferenceFallbackKeyPrefix);
+    public I18nMessagePackBuilder prefixReferenceQueries(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return prefixReferenceQueries(List.of(prefixes));
+    }
+
+    @NotNull
+    public I18nMessagePackBuilder prefixReferenceQueries(@NotNull String... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        List<I18nPath> mapped = Arrays.stream(prefixes).map(I18nPath::of).toList();
+        return prefixReferenceQueries(mapped);
+    }
+
+    @NotNull
+    public I18nMessagePackBuilder prefixQueries(@NotNull List<I18nPath> prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        this.queryPrefixes = List.copyOf(prefixes);
         return this;
     }
 
     @NotNull
-    public I18nMessagePackBuilder addReferenceFallbackKeyPrefix(@NotNull String keyPrefix) {
-        expectNonBlank(keyPrefix, "keyPrefix");
-        I18nPath i18nPath = I18nPath.of(keyPrefix);
-        this.referenceFallbackPaths.add(i18nPath);
-        return this;
+    public I18nMessagePackBuilder prefixQueries(@NotNull String... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        List<I18nPath> mapped = Arrays.stream(prefixes).map(I18nPath::of).toList();
+        return prefixQueries(mapped);
     }
 
     @NotNull
-    public I18nMessagePackBuilder addMessageFallbackKeyPrefixes(@NotNull List<String> keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        keyPrefixes.forEach(this::addMessageFallbackKeyPrefix);
-        return this;
-    }
-
-    @NotNull
-    public I18nMessagePackBuilder addMessageFallbackKeyPrefixes(@NotNull String... keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        Arrays.stream(keyPrefixes).forEach(this::addMessageFallbackKeyPrefix);
-        return this;
-    }
-
-    @NotNull
-    public I18nMessagePackBuilder addMessageFallbackKeyPrefix(@NotNull String keyPrefix) {
-        expectNonBlank(keyPrefix, "keyPrefix");
-        I18nPath i18nPath = I18nPath.of(keyPrefix);
-        this.messageFallbackPaths.add(i18nPath);
-        return this;
-    }
-
-    @NotNull
-    public I18nMessagePackBuilder addFallbackKeyPrefixes(@NotNull List<String> keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        addMessageFallbackKeyPrefixes(keyPrefixes);
-        addReferenceFallbackKeyPrefixes(keyPrefixes);
-        return this;
-    }
-
-    @NotNull
-    public I18nMessagePackBuilder addFallbackKeyPrefixes(@NotNull String... keyPrefixes) {
-        expectNonNull(keyPrefixes, "keyPrefixes");
-        addMessageFallbackKeyPrefixes(keyPrefixes);
-        addReferenceFallbackKeyPrefixes(keyPrefixes);
-        return this;
-    }
-
-    @NotNull
-    public I18nMessagePackBuilder addFallbackKeyPrefix(@NotNull String keyPrefix) {
-        expectNonBlank(keyPrefix, "keyPrefix");
-        addMessageFallbackKeyPrefix(keyPrefix);
-        addReferenceFallbackKeyPrefix(keyPrefix);
-        return this;
+    public I18nMessagePackBuilder prefixQueries(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return prefixQueries(List.of(prefixes));
     }
 
     @NotNull
@@ -349,14 +321,14 @@ public final class I18nMessagePackBuilder {
         bundles = TemplatesBundlePrefixes.prefix(bundles);
         detectMissingMessages(bundles);
         LocaleResolver localeResolver = LocaleResolver.of(defaultLocale, bundles);
-        I18nKeyGenerator messageKeyGenerator = new I18nKeyGenerator(defaultLocale, messageFallbackPaths, localeResolver);
+        I18nKeyGenerator messageKeyGenerator = new I18nKeyGenerator(defaultLocale, queryPrefixes, localeResolver);
         MessageTemplateParser parser = buildMessageTemplateParser(bundles, localeResolver);
         Map<I18nKey, MessageTemplate> templates = parser.parseTemplates(bundles);
         return new ImmutableI18nMessagePack(templates, parser, missingMessageHandler, messageKeyGenerator);
     }
 
     private MessageTemplateParser buildMessageTemplateParser(List<I18nMessageBundle> bundles, LocaleResolver localeResolver) {
-        I18nKeyGenerator referenceKeyGenerator = new I18nKeyGenerator(defaultLocale, referenceFallbackPaths, localeResolver);
+        I18nKeyGenerator referenceKeyGenerator = new I18nKeyGenerator(defaultLocale, referencePrefixes, localeResolver);
         ReferenceResolver referenceResolver = new ReferenceResolver(bundles, referenceKeyGenerator, resolveReferences);
         ArgumentResolver argumentResolver = buildArgumentResolver();
         MessageTemplateNormalizer messageTemplateNormalizer = new MessageTemplateNormalizer(normalizeWhitespaces);

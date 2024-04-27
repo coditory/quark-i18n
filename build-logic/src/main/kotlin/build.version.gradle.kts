@@ -41,7 +41,7 @@ data class Semver(
     fun nextPatchSnapshot(): Semver {
         return copy(
             patch = patch + 1,
-            suffix = "SNAPSHOT"
+            suffix = "SNAPSHOT",
         )
     }
 
@@ -60,7 +60,10 @@ data class Semver(
     companion object {
         private val REGEX = Regex("v?([0-9]+)\\.([0-9]+)\\.([0-9]+)(-.+)?")
 
-        fun parse(text: String, strict: Boolean = true): Semver? {
+        fun parse(
+            text: String,
+            strict: Boolean = true,
+        ): Semver? {
             val groups = REGEX.matchEntire(text)?.groups ?: return null
             if (groups.size < 4 || groups.size > 5) return null
             if (strict && groups[0]?.value?.startsWith("v") == true) return null
@@ -84,19 +87,20 @@ data class Semver(
             command: String,
             workingDir: File = File("."),
             timeoutAmount: Long = 60,
-            timeoutUnit: TimeUnit = TimeUnit.SECONDS
-        ): String = ProcessBuilder("sh", "-c", command)
-            .directory(workingDir)
-            .redirectOutput(ProcessBuilder.Redirect.PIPE)
-            .redirectError(ProcessBuilder.Redirect.PIPE)
-            .start()
-            .apply { waitFor(timeoutAmount, timeoutUnit) }
-            .run {
-                val error = errorStream.bufferedReader().readText().trim()
-                if (error.isNotEmpty()) {
-                    throw IOException(error)
+            timeoutUnit: TimeUnit = TimeUnit.SECONDS,
+        ): String =
+            ProcessBuilder("sh", "-c", command)
+                .directory(workingDir)
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.PIPE)
+                .start()
+                .apply { waitFor(timeoutAmount, timeoutUnit) }
+                .run {
+                    val error = errorStream.bufferedReader().readText().trim()
+                    if (error.isNotEmpty()) {
+                        throw IOException(error)
+                    }
+                    inputStream.bufferedReader().readText().trim()
                 }
-                inputStream.bufferedReader().readText().trim()
-            }
     }
 }

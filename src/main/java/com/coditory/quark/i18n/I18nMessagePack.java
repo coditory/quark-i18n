@@ -3,6 +3,8 @@ package com.coditory.quark.i18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -114,11 +116,18 @@ public interface I18nMessagePack {
     }
 
     @NotNull
-    I18nMessagePack prefixQueries(I18nPath prefix);
+    I18nMessagePack prefixQueries(@NotNull List<I18nPath> prefixes);
 
     @NotNull
-    default I18nMessagePack prefixQueries(@NotNull String prefix) {
-        expectNonNull(prefix, "prefix");
-        return prefixQueries(I18nPath.of(prefix));
+    default I18nMessagePack prefixQueries(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return prefixQueries(List.of(prefixes));
+    }
+
+    @NotNull
+    default I18nMessagePack prefixQueries(@NotNull String... prefixes) {
+        expectNonNull(prefixes, "prefix");
+        List<I18nPath> paths = Arrays.stream(prefixes).map(I18nPath::of).toList();
+        return prefixQueries(paths);
     }
 }

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -14,7 +15,6 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     private final Map<I18nKey, MessageTemplate> templates;
     private final MessageTemplateParser parser;
     private final I18nMissingMessageHandler unresolvedMessageHandler;
-    private final I18nPath queryPrefix;
     private final I18nKeyGenerator keyGenerator;
 
     ImmutableI18nMessagePack(
@@ -23,22 +23,11 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
             I18nMissingMessageHandler unresolvedMessageHandler,
             I18nKeyGenerator keyGenerator
     ) {
-        this(templates, parser, unresolvedMessageHandler, keyGenerator, null);
-    }
-
-    private ImmutableI18nMessagePack(
-            Map<I18nKey, MessageTemplate> templates,
-            MessageTemplateParser parser,
-            I18nMissingMessageHandler unresolvedMessageHandler,
-            I18nKeyGenerator keyGenerator,
-            I18nPath queryPrefix
-    ) {
         expectNonNull(templates, "templates");
         this.templates = Map.copyOf(templates);
         this.parser = expectNonNull(parser, "parser");
         this.unresolvedMessageHandler = expectNonNull(unresolvedMessageHandler, "unresolvedMessageHandler");
         this.keyGenerator = expectNonNull(keyGenerator, "keyGenerator");
-        this.queryPrefix = queryPrefix;
     }
 
     @NotNull
@@ -55,7 +44,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
         expectNonNull(args, "args");
         String result = getMessageOrNull(key, args);
         return result == null
-                ? unresolvedMessageHandler.onUnresolvedMessage(key, args)
+                ? unresolvedMessageHandler.onUnresolvedMessage(key, keyGenerator.keys(key), args)
                 : result;
     }
 
@@ -66,7 +55,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
         expectNonNull(args, "args");
         String result = getMessageOrNull(key, args);
         return result == null
-                ? unresolvedMessageHandler.onUnresolvedMessageWithNamedArguments(key, args)
+                ? unresolvedMessageHandler.onUnresolvedMessageWithNamedArguments(key, keyGenerator.keys(key), args)
                 : result;
     }
 
@@ -91,7 +80,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     }
 
     private Optional<MessageTemplateWithKey> getTemplate(I18nKey key) {
-        return keyGenerator.keys(key, queryPrefix).stream()
+        return keyGenerator.keys(key).stream()
                 .filter(templates::containsKey)
                 .map(matched -> new MessageTemplateWithKey(matched, templates.get(matched)))
                 .findFirst();
@@ -130,9 +119,10 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
 
     @Override
     @NotNull
-    public I18nMessagePack prefixQueries(@NotNull I18nPath prefix) {
-        expectNonNull(prefix, "prefix");
-        return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, keyGenerator, prefix);
+    public I18nMessagePack prefixQueries(@NotNull List<I18nPath> prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        I18nKeyGenerator updated = keyGenerator.withPrefixes(prefixes);
+        return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, updated);
     }
 
     private record MessageTemplateWithKey(I18nKey key, MessageTemplate template) {

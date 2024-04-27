@@ -46,8 +46,8 @@ public final class Reloadable18nMessagePack implements I18nMessagePack {
     }
 
     @Override
-    public @NotNull I18nMessagePack prefixQueries(I18nPath prefix) {
-        return i18nMessagePack.prefixQueries(prefix);
+    public @NotNull I18nMessagePack prefixQueries(@NotNull List<I18nPath> prefixes) {
+        return i18nMessagePack.prefixQueries(prefixes);
     }
 
     @Override

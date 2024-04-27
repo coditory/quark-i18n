@@ -182,7 +182,6 @@ If there is still no match then the default locale (followed by a less strict de
 I18nMessagePack messages = I18nMessagePack.builder()
         .scanClassPath("/i18n/messages-{locale}.yml")
         .setDefaultLocale(PL_PL)
-        .addFallbackKeyPrefix("glossary")
         .build();
 
 String message = messages.getMessage(Locales.en_US, "hello");
@@ -203,7 +202,7 @@ Sometimes it is useful to specify a common path prefix for all unmatched queries
 I18nMessagePack messages = I18nMessagePack.builder()
         .scanClassPath("/i18n/messages-{locale}.yml")
         .setDefaultLocale(PL_PL)
-        .addMessageFallbackKeyPrefix("common")
+        .prefixQueries("", "common")
         .build();
 
 String message = messages.getMessage(Locales.en_US, "hello");
@@ -304,7 +303,7 @@ I18nMessagePack messagePack = I18nMessagePack.builder()
         .addMessage(EN_US, "msg", "${company.name} was established on 1988")
         .scanClassPath("/i18n/messages-{locale}.yml")
         .setDefaultLocale(PL_PL)
-        .addFallbackKeyPrefix("fallback")
+        .prefixQueries("", "fallback")
         .build();
 ```
 
@@ -325,7 +324,7 @@ If the reference is defined in a message stored in a prefixed file it will be au
 I18nMessagePack messagePack = I18nMessagePack.builder()
         .scanClassPathLocation("i18n/{prefix}/message_{locale}.yml")
         .setDefaultLocale(PL_PL)
-        .addFallbackKeyPrefix("fallback")
+        .prefixQueries("", "fallback")
         .build();
 ```
 
@@ -442,7 +441,7 @@ You can skip them using a custom missing message detector:
 I18nMissingMessagesDetector detector = I18nMissingMessagesDetector.builder()
         .skipPath(skipPath)
         .logMissingMessages()
-        .build()
+        .build();
 
 I18nMessagePack.
 

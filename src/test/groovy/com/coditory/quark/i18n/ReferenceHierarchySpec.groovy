@@ -85,7 +85,7 @@ class ReferenceHierarchySpec extends Specification {
                     .addMessage(PL, "fallback.f", "pl:fallback.f")
             // common settings
                     .setDefaultLocale(PL_PL)
-                    .addFallbackKeyPrefix("fallback")
+                    .prefixReferenceQueries("", "fallback")
                     .build()
                     .getMessage(locale, "msg")
         then:

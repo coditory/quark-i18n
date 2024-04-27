@@ -41,7 +41,7 @@ class MessageResolutionSpec extends Specification {
                     .addMessage(PL, "x.y.c", "pl:x.y.c")
                     .setDefaultLocale(PL_PL)
                     .build()
-                    .prefixQueries("x.y")
+                    .prefixQueries("x.y", "")
         expect:
             messagePack.getMessage(EN_US, "a") == "en-US:x.y.a"
             messagePack.getMessage(EN_US, "b") == "en-US:b"
