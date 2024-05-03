@@ -165,7 +165,7 @@ final class I18nPathPattern {
         String prefix = null;
         if (activeGroups.containsKey(PREFIXES_GROUP_MARKER)) {
             String prefixesMatch = matcher.group("prefixes");
-            if (prefixesMatch != null && !prefixesMatch.equals("/")) {
+            if (prefixesMatch != null && !prefixesMatch.isEmpty() && !prefixesMatch.equals("/")) {
                 prefix = prefixesMatch.substring(0, prefixesMatch.length() - 1);
             }
         }

@@ -42,6 +42,7 @@ class I18nPathPatternSpec extends Specification {
             "/abc/*.json"                        | "/abc/x.json.json"
             "/abc/*.*.json"                      | "/abc/x.xml.json"
             // capturing groups
+            "/abc/{prefixes}/i18n.json"          | "/abc/i18n.json"
             "/abc/{prefixes}/*.json"             | "/abc/def/xxx.json"
             "{prefixes}/*.json"                  | "/abc/def/xxx.json"
             "/abc/**/i18n_{locale}.json"         | "/abc/def/i18n_pl-PL.json"
@@ -135,11 +136,12 @@ class I18nPathPatternSpec extends Specification {
         when:
             I18nPathGroups matched = matchGroups(pattern, input)
         then:
-            matched.path() == I18nPath.of(path)
+            matched.path() == (path == null ? null : I18nPath.of(path))
         where:
             pattern                                 | input                            || path
             "**/i18n-{prefix}.yml"                  | "/abc/i18n-homepage.yml"         || "homepage"
             "/i18n/{prefix}.yml"                    | "/i18n/glossary.yml"             || "glossary"
+            "com/i18n/{prefixes}/i18n.yml"          | "com/i18n/i18n.yml"              || null
             "com/i18n/{prefixes}/i18n.yml"          | "com/i18n/abc/def/i18n.yml"      || "abc.def"
             "com/i18n/{prefixes}/i18n-{prefix}.yml" | "com/i18n/abc/def/i18n-base.yml" || "abc.def.base"
             "com/i18n/{prefixes}/xxx/i18n.yml"      | "com/i18n/abc/def/xxx/i18n.yml"  || "abc.def"
