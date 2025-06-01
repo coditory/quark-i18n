@@ -37,7 +37,7 @@ Add to your `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation "com.coditory.quark:quark-i18n:$version"
+    implementation "com.coditory.quark:quark-i18n:0.0.14"
 }
 ```
 
