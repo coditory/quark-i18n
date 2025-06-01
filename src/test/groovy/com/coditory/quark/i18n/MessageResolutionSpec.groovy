@@ -41,10 +41,27 @@ class MessageResolutionSpec extends Specification {
                     .addMessage(PL, "x.y.c", "pl:x.y.c")
                     .setDefaultLocale(PL_PL)
                     .build()
-                    .prefixQueries("x.y", "")
+                    .withQueryPrefixes("x.y", "")
         expect:
             messagePack.getMessage(EN_US, "a") == "en-US:x.y.a"
             messagePack.getMessage(EN_US, "b") == "en-US:b"
             messagePack.getMessage(EN_US, "c") == "pl:x.y.c"
+    }
+
+    @Unroll
+    def "should handle nested prefixing"() {
+        given:
+            I18nMessages i18n = I18nMessagePack.builder()
+                    .addMessage(EN_US, "a", "a")
+                    .addMessage(EN_US, "b", "b")
+                    .addMessage(EN_US, "x.a", "x.a")
+                    .addMessage(EN_US, "x.b", "x.b")
+                    .addMessage(EN_US, "x.y.a", "x.y.a")
+                    .addMessage(EN_US, "x.y.b", "x.y.b")
+                    .buildLocalized(EN_US)
+        expect:
+            i18n.getMessage("a") == "a"
+            i18n.prefixQueries("x").getMessage("a") == "x.a"
+            i18n.prefixQueries("x").prefixQueries("y").getMessage("a") == "x.y.a"
     }
 }

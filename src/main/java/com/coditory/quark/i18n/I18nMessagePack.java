@@ -117,19 +117,28 @@ public interface I18nMessagePack extends Closeable {
     }
 
     @NotNull
-    I18nMessagePack prefixQueries(@NotNull List<I18nPath> prefixes);
-
-    @NotNull
-    default I18nMessagePack prefixQueries(@NotNull I18nPath... prefixes) {
-        expectNonNull(prefixes, "prefixes");
-        return prefixQueries(List.of(prefixes));
+    default I18nMessagePack prefixQueries(@NotNull String prefix) {
+        expectNonNull(prefix, "prefix");
+        return prefixQueries(I18nPath.of(prefix));
     }
 
     @NotNull
-    default I18nMessagePack prefixQueries(@NotNull String... prefixes) {
+    I18nMessagePack prefixQueries(@NotNull I18nPath prefix);
+
+    @NotNull
+    I18nMessagePack withQueryPrefixes(@NotNull List<I18nPath> prefixes);
+
+    @NotNull
+    default I18nMessagePack withQueryPrefixes(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return withQueryPrefixes(List.of(prefixes));
+    }
+
+    @NotNull
+    default I18nMessagePack withQueryPrefixes(@NotNull String... prefixes) {
         expectNonNull(prefixes, "prefixes");
         List<I18nPath> paths = Arrays.stream(prefixes).map(I18nPath::of).toList();
-        return prefixQueries(paths);
+        return withQueryPrefixes(paths);
     }
 
     @Override

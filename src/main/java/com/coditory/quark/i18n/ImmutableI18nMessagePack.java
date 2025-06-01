@@ -118,8 +118,15 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     }
 
     @Override
+    public @NotNull I18nMessagePack prefixQueries(@NotNull I18nPath prefix) {
+        expectNonNull(prefix, "prefix");
+        I18nKeyGenerator updated = keyGenerator.prefixQueries(prefix);
+        return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, updated);
+    }
+
+    @Override
     @NotNull
-    public I18nMessagePack prefixQueries(@NotNull List<I18nPath> prefixes) {
+    public I18nMessagePack withQueryPrefixes(@NotNull List<I18nPath> prefixes) {
         expectNonNull(prefixes, "prefixes");
         I18nKeyGenerator updated = keyGenerator.withPrefixes(prefixes);
         return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, updated);

@@ -87,21 +87,33 @@ public final class I18nMessages {
     }
 
     @NotNull
-    public I18nMessages prefixQueries(@NotNull List<I18nPath> prefixes) {
-        expectNonNull(prefixes, "prefixes");
-        return messagePack.prefixQueries(prefixes).localize(locale);
+    public I18nMessages prefixQueries(@NotNull String prefix) {
+        expectNonNull(prefix, "prefix");
+        return prefixQueries(I18nPath.of(prefix));
     }
 
     @NotNull
-    public I18nMessages prefixQueries(@NotNull I18nPath... prefixes) {
-        expectNonNull(prefixes, "prefixes");
-        return messagePack.prefixQueries(prefixes).localize(locale);
+    public I18nMessages prefixQueries(@NotNull I18nPath prefix) {
+        expectNonNull(prefix, "prefix");
+        return messagePack.prefixQueries(prefix).localize(locale);
     }
 
     @NotNull
-    public I18nMessages prefixQueries(@NotNull String... prefixes) {
+    public I18nMessages withQueryPrefixes(@NotNull List<I18nPath> prefixes) {
         expectNonNull(prefixes, "prefixes");
-        return messagePack.prefixQueries(prefixes).localize(locale);
+        return messagePack.withQueryPrefixes(prefixes).localize(locale);
+    }
+
+    @NotNull
+    public I18nMessages withQueryPrefixes(@NotNull I18nPath... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return messagePack.withQueryPrefixes(prefixes).localize(locale);
+    }
+
+    @NotNull
+    public I18nMessages withQueryPrefixes(@NotNull String... prefixes) {
+        expectNonNull(prefixes, "prefixes");
+        return messagePack.withQueryPrefixes(prefixes).localize(locale);
     }
 
     @NotNull

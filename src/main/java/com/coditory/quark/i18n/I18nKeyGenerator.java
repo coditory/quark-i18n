@@ -24,6 +24,14 @@ final class I18nKeyGenerator {
         this.localeResolver = localeResolver;
     }
 
+    I18nKeyGenerator prefixQueries(I18nPath prefix) {
+        expectNonNull(prefix, "prefix");
+        List<I18nPath> resolved = defaultPrefixes.stream()
+                .map((p) -> p.child(prefix))
+                .toList();
+        return new I18nKeyGenerator(defaultLocales, resolved, localeResolver);
+    }
+
     I18nKeyGenerator withPrefixes(List<I18nPath> prefixes) {
         expectNonNull(prefixes, "prefixes");
         return new I18nKeyGenerator(defaultLocales, prefixes, localeResolver);
