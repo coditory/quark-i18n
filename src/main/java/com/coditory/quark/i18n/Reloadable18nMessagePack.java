@@ -41,6 +41,16 @@ public final class Reloadable18nMessagePack implements I18nMessagePack {
     }
 
     @Override
+    public @NotNull I18nMessage getTemplate(@NotNull I18nKey key) {
+        return i18nMessagePack.getTemplate(key);
+    }
+
+    @Override
+    public @Nullable I18nMessage getTemplateOrNull(@NotNull I18nKey key) {
+        return i18nMessagePack.getTemplateOrNull(key);
+    }
+
+    @Override
     public @NotNull I18nMessages localize(@NotNull Locale locale) {
         return i18nMessagePack.localize(locale);
     }

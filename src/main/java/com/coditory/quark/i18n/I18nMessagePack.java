@@ -19,6 +19,28 @@ public interface I18nMessagePack extends Closeable {
     }
 
     @NotNull
+    I18nMessage getTemplate(@NotNull I18nKey key);
+
+    @Nullable
+    I18nMessage getTemplateOrNull(@NotNull I18nKey key);
+
+    @NotNull
+    default I18nMessage getTemplate(@NotNull Locale locale, @NotNull I18nPath path) {
+        expectNonNull(locale, "locale");
+        expectNonNull(path, "path");
+        I18nKey messageKey = I18nKey.of(locale, path);
+        return getTemplate(messageKey);
+    }
+
+    @Nullable
+    default I18nMessage getTemplateOrNull(@NotNull Locale locale, @NotNull I18nPath path) {
+        expectNonNull(locale, "locale");
+        expectNonNull(path, "path");
+        I18nKey messageKey = I18nKey.of(locale, path);
+        return getTemplateOrNull(messageKey);
+    }
+
+    @NotNull
     String getMessage(@NotNull I18nKey key, Object... args);
 
     @NotNull

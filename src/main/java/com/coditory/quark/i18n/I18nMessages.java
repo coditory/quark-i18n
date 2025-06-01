@@ -21,6 +21,30 @@ public final class I18nMessages {
     }
 
     @NotNull
+    public I18nMessage getTemplate(@NotNull I18nPath path) {
+        expectNonNull(path, "path");
+        return messagePack.getTemplate(locale, path);
+    }
+
+    @NotNull
+    public I18nMessage getTemplate(@NotNull String path) {
+        expectNonNull(path, "path");
+        return getTemplate(I18nPath.of(path));
+    }
+
+    @Nullable
+    public I18nMessage getTemplateOrNull(@NotNull I18nPath path) {
+        expectNonNull(path, "path");
+        return messagePack.getTemplateOrNull(locale, path);
+    }
+
+    @Nullable
+    public I18nMessage getTemplateOrNull(@NotNull String path) {
+        expectNonNull(path, "path");
+        return getTemplateOrNull(I18nPath.of(path));
+    }
+
+    @NotNull
     public String getMessage(@NotNull I18nPath path, Object... args) {
         expectNonNull(path, "path");
         expectNonNull(args, "args");

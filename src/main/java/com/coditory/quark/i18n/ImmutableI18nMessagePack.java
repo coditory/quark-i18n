@@ -64,8 +64,8 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     public String getMessageOrNull(@NotNull I18nKey key, Object... args) {
         expectNonNull(key, "key");
         expectNonNull(args, "args");
-        return getTemplate(key)
-                .map(message -> message.resolve(key.locale(), args))
+        return getOptionalTemplate(key)
+                .map(message -> message.resolve(args))
                 .orElse(null);
     }
 
@@ -74,15 +74,27 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
     public String getMessageOrNull(@NotNull I18nKey key, @NotNull Map<String, Object> args) {
         expectNonNull(key, "key");
         expectNonNull(args, "args");
-        return getTemplate(key)
-                .map(message -> message.resolve(key.locale(), args))
+        return getOptionalTemplate(key)
+                .map(message -> message.resolve(args))
                 .orElse(null);
     }
 
-    private Optional<MessageTemplateWithKey> getTemplate(I18nKey key) {
+    @Override
+    @NotNull
+    public I18nMessage getTemplate(@NotNull I18nKey key) {
+        return getOptionalTemplate(key).orElse(null);
+    }
+
+    @Override
+    @Nullable
+    public I18nMessage getTemplateOrNull(@NotNull I18nKey key) {
+        return getOptionalTemplate(key).orElse(null);
+    }
+
+    private Optional<I18nMessage> getOptionalTemplate(I18nKey key) {
         return keyGenerator.keys(key).stream()
                 .filter(templates::containsKey)
-                .map(matched -> new MessageTemplateWithKey(matched, templates.get(matched)))
+                .map(matched -> new I18nMessage(key.locale(), matched, templates.get(matched)))
                 .findFirst();
     }
 
@@ -130,27 +142,5 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
         expectNonNull(prefixes, "prefixes");
         I18nKeyGenerator updated = keyGenerator.withPrefixes(prefixes);
         return new ImmutableI18nMessagePack(templates, parser, unresolvedMessageHandler, updated);
-    }
-
-    private record MessageTemplateWithKey(I18nKey key, MessageTemplate template) {
-        String resolve(Locale locale, @NotNull Map<String, Object> args) {
-            try {
-                return template.resolve(locale, args);
-            } catch (Throwable e) {
-                throw new IllegalArgumentException("Could not resolve message "
-                        + key.toShortString() + "=\"" + template.getValue()
-                        + "\" with named arguments " + args + " and locale: " + locale, e);
-            }
-        }
-
-        String resolve(Locale locale, @NotNull Object[] args) {
-            try {
-                return template.resolve(locale, args);
-            } catch (Throwable e) {
-                throw new IllegalArgumentException("Could not resolve message "
-                        + key.toShortString() + "=\"" + template.getValue()
-                        + "\" with indexed arguments " + Arrays.toString(args) + " and locale: " + locale, e);
-            }
-        }
     }
 }

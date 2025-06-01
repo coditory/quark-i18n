@@ -19,6 +19,17 @@ class MessageResolutionSpec extends Specification {
             result == "Witaj Jan Kowalski"
     }
 
+    def "should return message template with two indexed arguments"() {
+        given:
+            I18nMessages messages = I18nMessagePack.builder()
+                    .addMessage(PL, "hello", "Witaj {0} {1}")
+                    .buildLocalized(PL)
+        when:
+            I18nMessage result = messages.getTemplate("hello")
+        then:
+            result.resolve("Jan", "Kowalski") == "Witaj Jan Kowalski"
+    }
+
     def "should return message with two named arguments"() {
         given:
             I18nMessages messages = I18nMessagePack.builder()
