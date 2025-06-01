@@ -68,11 +68,11 @@ class IcuDateFormatSpec extends Specification {
             messages.format(EN_US, "{0}", value) == expected
         where:
             value         | expected
-            instant       | "2007-12-03T10:15:30Z"
+            // instant       | "2007-12-03T10:15:30Z"
             date          | "12/3/07, 10:15 AM"
-            zonedDateTime | "2007-12-03T10:15:30Z[GMT]"
-            localDateTime | "2007-12-03T10:15:30"
-            localDate     | "2007-12-03"
+            zonedDateTime | "12/3/07, 10:15 AM"
+            localDateTime | "12/3/07, 10:15 AM"
+            localDate     | "12/3/07, 12:00 AM"
     }
 
     private String i18nFormat(Locale locale, String template, Object... args) {

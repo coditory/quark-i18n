@@ -109,7 +109,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
                     .resolve(locale, args);
         } catch (Throwable e) {
             throw new IllegalArgumentException("Could not format message " + template
-                    + "\" with indexed arguments " + Arrays.toString(args) + " and locale: " + locale);
+                    + "\" with indexed arguments " + Arrays.toString(args) + " and locale: " + locale, e);
         }
     }
 
@@ -125,7 +125,7 @@ final class ImmutableI18nMessagePack implements I18nMessagePack {
         } catch (Throwable e) {
             throw new IllegalArgumentException("Could not format message "
                     + template
-                    + "\" with named arguments " + args + " and locale: " + locale);
+                    + "\" with named arguments " + args + " and locale: " + locale, e);
         }
     }
 
