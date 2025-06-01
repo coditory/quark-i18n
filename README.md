@@ -361,9 +361,7 @@ I18nMessages messages = I18nMessagePack.builder()
         .addArgumentTransformer(Foo, (foo) -> foo.getSomeNumber())
         .buildLocalized(EN);
 
-messages.
-
-getMessage("msg",new Foo(123.456))=="00123.45600"
+messages.getMessage("msg",new Foo(123.456))=="00123.45600"
 ```
 
 ## Missing messages
@@ -377,9 +375,7 @@ When message is missing, exception is thrown. This mechanism can be changed with
 i18nMessagePackBuilder.setMissingMessageHandler(customHandler);
 
 // ...or simply return message path when message is missing
-i18nMessagePackBuilder.
-
-usePathOnMissingMessage();
+i18nMessagePackBuilder.usePathOnMissingMessage();
 ```
 
 ### Missing message detection
@@ -398,21 +394,11 @@ i18nMessagePackBuilder.logMissingMessages() - simply logs a report about missing
 
 ```java
 I18nMessagePack.builder()
-      .
-
-addMessage(EN_US, "hello","Hello")
-      .
-
-addMessage(PL_PL, "hello","Cześć")
-      .
-
-addMessage(DE_DE, "bye","Tschüss")
-      .
-
-logMissingMessages()
-      .
-
-build();
+      .addMessage(EN_US, "hello","Hello")
+      .addMessage(PL_PL, "hello","Cześć")
+      .addMessage(DE_DE, "bye","Tschüss")
+      .logMissingMessages()
+      .build();
 ```
 
 Will generate following report:
@@ -443,27 +429,14 @@ I18nMissingMessagesDetector detector = I18nMissingMessagesDetector.builder()
         .logMissingMessages()
         .build();
 
-I18nMessagePack.
-
-builder()
-    .
-
-addMessage(EN_US, "a.b.c.d","MISSING")
-    .
-
-addMessage(EN_US, "x","X")
-    .
-
-addMessage(EN_GB, "x","X")
-    .
-
-addMessage(PL_PL, "x","X")
-    .
-
-detectMissingMessages(detector)
-    .
-
-build();
+I18nMessagePack
+        .builder()
+        .addMessage(EN_US, "a.b.c.d","MISSING")
+        .addMessage(EN_US, "x","X")
+        .addMessage(EN_GB, "x","X")
+        .addMessage(PL_PL, "x","X")
+        .detectMissingMessages(detector)
+        .build();
 
 // to skip a.b.c.d use one of sample path patterns as a skipPath:
 // - "a.b.c.d",
