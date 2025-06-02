@@ -1,8 +1,10 @@
 package com.coditory.quark.i18n;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import static com.coditory.quark.i18n.Preconditions.expectNonNull;
 
@@ -51,34 +53,49 @@ final class I18nKeyGenerator {
         expectNonNull(key, "key");
         expectNonNull(prefixes, "prefixes");
         List<Locale> locales = localeResolver.getLocaleHierarchy(key.locale());
-        I18nPath path = key.path();
+        Set<I18nKey> used = new HashSet<>();
         List<I18nKey> keys = new ArrayList<>(6 * (1 + prefixes.size() + this.defaultPrefixes.size()));
+        I18nPath path = key.path();
         // locales x (prefix + path)
         for (I18nPath prefix : prefixes) {
             I18nPath prefixed = prefix.child(path);
             for (Locale loc : locales) {
-                keys.add(I18nKey.of(loc, prefixed));
+                I18nKey k = I18nKey.of(loc, prefixed);
+                used.add(k);
+                keys.add(k);
             }
         }
         // locales * (defaultPrefixes + path)
         for (I18nPath prefix : this.defaultPrefixes) {
             I18nPath prefixed = prefix.child(path);
             for (Locale loc : locales) {
-                keys.add(I18nKey.of(loc, prefixed));
+                I18nKey k = I18nKey.of(loc, prefixed);
+                if (!used.contains(k)) {
+                    used.add(k);
+                    keys.add(k);
+                }
             }
         }
         // defaultLocales x (prefix + path)
         for (I18nPath prefix : prefixes) {
             I18nPath prefixed = prefix.child(path);
-            for (Locale loc : this.defaultLocales) {
-                keys.add(I18nKey.of(loc, prefixed));
+            for (Locale loc : defaultLocales) {
+                I18nKey k = I18nKey.of(loc, prefixed);
+                if (!used.contains(k)) {
+                    used.add(k);
+                    keys.add(k);
+                }
             }
         }
         // defaultLocales * (defaultPrefixes + path)
         for (I18nPath prefix : this.defaultPrefixes) {
             I18nPath prefixed = prefix.child(path);
-            for (Locale loc : this.defaultLocales) {
-                keys.add(I18nKey.of(loc, prefixed));
+            for (Locale loc : defaultLocales) {
+                I18nKey k = I18nKey.of(loc, prefixed);
+                if (!used.contains(k)) {
+                    used.add(k);
+                    keys.add(k);
+                }
             }
         }
         return keys;
