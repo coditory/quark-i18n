@@ -28,7 +28,7 @@ public class I18nMessage {
         }
     }
 
-    public String resolve(@NotNull Object[] args) {
+    public String resolve(@NotNull Object... args) {
         try {
             return template.resolve(locale, args);
         } catch (Throwable e) {
